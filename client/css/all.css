@@ -1,0 +1,81 @@
+* {margin: 0px; padding: 0px; vertical-align: middle; touch-action: manipulation;}
+
+html, body {height: 100%; text-align: center; background: #f6f6f6; font-family: Arial; font-size: 16px; -webkit-user-select: none;}
+canvas {position: relative; display: inline-block; vertical-align: middle;}
+
+.btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; background-color: #ccc; border: 1px solid #ccc;}
+
+.lobby {position: relative; display: block; padding: 10px; margin: 10px;}
+.salas {position: relative; display: block; padding: 5px; margin: 2px;}
+.salas .sala {position: relative; display: inline-block; margin: 0.2em;}
+.salas .sala .lugares {position: relative; display: block; position: relative; display: inline-block; padding: 30px; margin: 0px; min-width: 120px; min-height: 120px; border: 1px solid #ccc;}
+.salas .sala .opts {position: relative; display: block; padding: 10px;}
+.salas .P1, .salas .P2, .salas .P3, .salas .P4 {position: absolute; display: inline-block; min-width: 20px; min-height: 20px; padding: 10px; background-color: #fff; cursor: pointer;}
+.salas .P1 {top: 0; left: 50%; -webkit-transform: translateX(-50%); max-height: 50%;}
+.salas .P2 {top: 50%; right: 0; -webkit-transform: translateY(-50%); max-width: 50%;}
+.salas .P3 {bottom: 0; left: 50%; -webkit-transform: translateX(-50%); max-height: 50%;}
+.salas .P4 {top: 50%; left: 0; -webkit-transform: translateY(-50%); max-width: 50%;}
+
+.sala .opts {position: relative; display: block; background-color: #444; border: 1px solid #000;}
+.sala .opts span {position: relative; display: inline-block; padding: 0.5em; margin: 0.1em; background-color: #eee; cursor: pointer;}
+
+.carta {position: relative; display: inline-block; margin: 2px; background-color: #fff; border: 1px solid #ddd; cursor: pointer;}
+.carta .ind {position: absolute; display: inline-block; left: 5%; top: 5%; font-size: 18px; font-weight: bold;}
+
+.jogo {position: relative; display: block; width: 100%; height: 100%;}
+
+.players {position: relative; display: inline-block;}
+.players .player {position: relative; display: inline-block; padding: 5px; margin: 5px; background-color: #fff; border: 1px solid #eee; cursor: pointer;}
+.players .player .nome {position: relative; display: block; padding: 5px;}
+.players .player .num {position: relative; display: inline-block; padding: 5px;}
+.players .player .morto {position: relative; display: inline-block; padding: 0.4em; border: 1px solid #c32c2c; border-radius: 50%;}
+.players .player .morto_on {position: relative; display: inline-block; padding: 0.4em; background-color: #e91f1f; border: 1px solid #c32c2c; border-radius: 50%;}
+.players .player .score {position: relative; display: block;}
+.btn_morto {color: #fff !important; background-color: #e91f1f !important; border: 1px solid #c32c2c !important;}
+
+.meio {position: absolute; display: inline-block; width: 100% !important; height: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+.meio .wrap {position: relative; display: block; padding: 5px;}
+.mesa {position: relative; display: inline-block; width: 70px; height: 110px; background-color: #EFEFEF; border: 1px solid #E2E2E2; cursor: pointer;}
+.mesa .carta {margin: -1px;}
+.deck {position: relative; display: inline-block; cursor: pointer;}
+/*.deck .num, .mesa .num {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); padding: 0.2em 0.3em; color: #fff; background-color: #444; border-radius: 50%;}*/
+.deck .num, .mesa .num {position: absolute; display: inline-block; top: 0; right: 0; padding: 0.3em; color: #444; font-size: 14px; background-color: #ff0; border: 1px solid #e4e43c; border-radius: 50%;}
+/*
+.mesa {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-160%, -50%); width: 70px; height: 110px; background-color: #EFEFEF; border: 1px solid #E2E2E2; cursor: pointer;}
+.mesa .carta {margin: 0;}
+
+.deck {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); cursor: pointer;}
+.deck .num {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); padding: 0.2em 0.3em; color: #fff; background-color: #444;}
+*/
+
+.mesa_deck {position: absolute; display: inline-block; width: 100% !important;  overflow: auto; -webkit-overflow-scrolling: touch;}
+.player_deck {position: absolute; display: inline-block; width: 100% !important; height: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+.player_jogo_deck {position: absolute; display: inline-block; width: 100% !important; overflow: auto; -webkit-overflow-scrolling: touch;}
+
+.player_deck .grupo {position: relative; display: inline-block; height: 110px; margin: 5px;}
+
+.other_jogos {position: absolute; display: block; width: 100%; height: 50%; top: 0; text-align: left; background-color: #FFF7F7; overflow: auto;}
+.player_jogos {position: absolute; display: block; width: 100%; height: 50%; top: 50%; text-align: left; background-color: #F7FEFF; overflow: auto;}
+.player_jogos .baixado, .other_jogos .baixado {position: relative; display: inline-block; margin: 4px; height: 90px;}
+
+.player_jogos .label {position: absolute; display: inline-block; top: 0; right: 10%; padding: 0.2em; font-size: 14px; background-color: #ff0; border: 1px solid #e4e43c;}
+
+.destaque {border: 1px solid #00ff00 !important;}
+.destaque::after {position: absolute; content: ''; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 255, 0, 1); opacity: 0.1;}
+
+.action {border: 1px solid #FF00F2 !important;}
+.action::after {position: absolute; content: ''; top: 0; left: 0; width: 100%; height: 100%; background: #FF00F2; opacity: 0.1;}
+
+.ui-dialog .ui-resizable-se {padding: 10px;}
+.ui-dialog .ui-dialog-content {padding: 0 !important;}
+/*.ui-dialog .ui-resizable-e, .ui-dialog .ui-resizable-s, .ui-dialog .ui-resizable-w, .ui-dialog .ui-resizable-se {padding: 10px;}*/
+
+.display_cartas {position: absolute; display: inline-block; right: 0; bottom: 0; -webkit-transform: scale(0.8); cursor: pointer;}
+
+.menu_adm {position: absolute; display: inline-block;}
+.menu_adm_opt > .ui-dialog-titlebar { display: none;}
+.menu_adm_opt > .ui-dialog-content {padding: 0;}
+.ui-widget-overlay {background-color: #fff; opacity: 0.8;}
+
+@media (max-width: 725px) {
+}

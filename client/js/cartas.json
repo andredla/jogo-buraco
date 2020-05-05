@@ -1,0 +1,15 @@
+{
+	"1": {"label": "A", "pontos": 20},
+	"2": {"label": "2", "pontos": 10},
+	"3": {"label": "3", "pontos": 5},
+	"4": {"label": "4", "pontos": 5},
+	"5": {"label": "5", "pontos": 5},
+	"6": {"label": "6", "pontos": 5},
+	"7": {"label": "7", "pontos": 5},
+	"8": {"label": "8", "pontos": 10},
+	"9": {"label": "9", "pontos": 10},
+	"10": {"label": "10", "pontos": 10},
+	"11": {"label": "J", "pontos": 10, "sprite": "jack"},
+	"12": {"label": "Q", "pontos": 10, "sprite": "queen"},
+	"13": {"label": "K", "pontos": 10, "sprite": "king"}
+}

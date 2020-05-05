@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content = "-1" />
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Buraco</title>
+<link href="client/css/jquery-ui.structure.css" rel="stylesheet" type="text/css">
+<link href="client/css/jquery-ui.css" rel="stylesheet" type="text/css">
+<link href="client/css/all.css" rel="stylesheet" type="text/css">
+<link href="client/css/animate.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" src="client/js/socket.io-1.4.5.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/jquery.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/jquery-ui.min.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/jquery_cookie.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/tinycolor.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/biblioteca.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var socket = io();
+</script>
+<script language="JavaScript" src="client/js/game.js" type="text/javascript"></script>
+</head>
+<body>
+
+ <!-- Inicio [lobby] -->
+	<div class="lobby" style="display: ;">
+		<a class="btn" href="#" onclick="return sala_cria();">Criar Sala</a>
+		<a class="btn" href="#" onclick="return retomar();">Retomar</a>
+		<br/>
+		<input type="text" id="player_nome" name="nome" value="">
+
+		<span class="salas"></span>
+	</div>
+	<!-- Fim [lobby] -->
+
+	<!-- Inicio [menu_adm] -->
+	<div class="menu_adm" style="display: none;">
+		<a class="btn btn_morto_mesa" href="#" onclick="return morto_mesa();">Morto para mesa</a>
+		<a class="btn btn_continuar" href="#" onclick="return proxima();">Próxima</a>
+		<a class="btn btn_terminar" href="#" onclick="return terminar();">Terminar</a>
+	</div>
+	<!-- Fim [menu_adm] -->
+
+ <!-- Inicio [jogo] -->
+	<div class="jogo" style="display: none;">
+	<span class="other_jogos"></span>
+	<span class="player_jogos"></span>
+		<!--<span class="players"></span>-->
+
+		<span class="meio" title="Mesa">
+			<span class="wrap">
+				<span class="mesa" onclick="mesa();"></span>
+				<span class="deck" onclick="deck_compra();"></span>
+			</span>
+		</span>
+
+		<span class="player_jogo_deck" title="Jogo baixado"></span>
+		<span class="mesa_deck" title="Cartas da mesa"></span>
+		<span class="player_deck" title="Suas cartas"></span>
+		<span class="display_cartas" onclick="display_cartas();"><img src="client/imgs/cartas.svg" /></span>
+	</div>
+	<!-- Fim [jogo] -->
+
+</body>
+</html>
