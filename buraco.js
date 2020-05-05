@@ -533,7 +533,7 @@ function Deck(){
 			ret = 2;
 		}
 
-		if(dois && coringa.total >= 2){
+		if(tot >= 7 && dois && coringa.total >= 2){
 			ret = 2;
 		}
 
