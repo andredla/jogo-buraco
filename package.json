@@ -9,11 +9,12 @@
     "socket.io": "^2.3.0"
   },
 "engines": {
-"node": "10.20.x",
-"npm": "6.x"
+  "node": "10.20.x",
+  "npm": "6.x"
 },
   "devDependencies": {},
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
