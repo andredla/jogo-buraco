@@ -102,15 +102,27 @@ function Sala(){
 	}
 
 	this.start_debug = function(){
+		var d0 = new Deck();
+		d0.init({back: "#D03737"});
+
 		var d1 = new Deck();
-		//d1.init({bgcolor_1: "#FFF7F7", fgcolor_1: "#ff0000", bgcolor_2: "#FFF7F7", fgcolor_2: "#444444", back: "#D03737"});
-		d1.init({bgcolor_1: "#ffffff", fgcolor_1: "#ff0000", bgcolor_2: "#ffffff", fgcolor_2: "#444444", back: "#D03737"});
+		d1.init({diams_bg: "#ffffff", diams_fg: "#BDA435", spades_bg: "#ffffff", spades_fg: "#3586BD", hearts_bg: "#ffffff", hearts_fg: "#BD353D", clubs_bg: "#ffffff", clubs_fg: "#444444", back: "#D03737"});
 
 		var d2 = new Deck();
-		//d2.init({bgcolor_1: "#F9F9FF", fgcolor_1: "#ff0000", bgcolor_2: "#F9F9FF", fgcolor_2: "#444444", back: "#1313AF"});
-		d2.init({bgcolor_1: "#ffffff", fgcolor_1: "#ff0000", bgcolor_2: "#ffffff", fgcolor_2: "#444444", back: "#1313AF"});
+		d2.init({diams_bg: "#E8C424", diams_fg: "#ffffff", spades_bg: "#3586BD", spades_fg: "#ffffff", hearts_bg: "#BD353D", hearts_fg: "#ffffff", clubs_bg: "#444444", clubs_fg: "#ffffff", back: "#1313AF"});
+
+		var d3 = new Deck();
+		d3.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
+		
+
+		var d4 = new Deck();
+		d4.init({diams_bg: "#F7C96B", diams_fg: "#444444", spades_bg: "#A7CBFD", spades_fg: "#444444", hearts_bg: "#F97690", hearts_fg: "#444444", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
+
 		this.deck = new Deck();
-		this.deck.merge(d1, d2);
+		//this.deck.merge(this.deck, d0);
+		//this.deck.merge(this.deck, d1);
+		//this.deck.merge(this.deck, d2);
+		this.deck.merge(this.deck, d3);
 
 		this.players[0].deck = new Deck();
 		this.players[0].deck = this.deck;
@@ -123,13 +135,11 @@ function Sala(){
 		this.started = true;
 		this.mesa = new Deck();
 		var d1 = new Deck();
-		//d1.init({bgcolor_1: "#FFF7F7", fgcolor_1: "#ff0000", bgcolor_2: "#FFF7F7", fgcolor_2: "#444444", back: "#D03737"});
-		d1.init({bgcolor_1: "#ffffff", fgcolor_1: "#ff0000", bgcolor_2: "#ffffff", fgcolor_2: "#444444", back: "#D03737"});
+		d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
 		d1.shuffle();
 
 		var d2 = new Deck();
-		//d2.init({bgcolor_1: "#F9F9FF", fgcolor_1: "#ff0000", bgcolor_2: "#F9F9FF", fgcolor_2: "#444444", back: "#1313AF"});
-		d2.init({bgcolor_1: "#ffffff", fgcolor_1: "#ff0000", bgcolor_2: "#ffffff", fgcolor_2: "#444444", back: "#1313AF"});
+		d2.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
 		d2.shuffle();
 
 		this.deck = new Deck();
@@ -317,13 +327,17 @@ function Deck(){
 
 	this.init = function(opts){
 		var opt = extend({
-			bgcolor_1: "#ffffff",
-			fgcolor_1: "#ff0000",
-			bgcolor_2: "#ffffff",
-			fgcolor_2: "#444444",
+			diams_bg: "#ffffff",
+			diams_fg: "#ff0000",
+			spades_bg: "#ffffff",
+			spades_fg: "#444444",
+			hearts_bg: "#ffffff",
+			hearts_fg: "#ff0000",
+			clubs_bg: "#ffffff",
+			clubs_fg: "#444444",
 			back: "#eeeeee",
 			num: 13,
-			naipes: ["diams", "clubs", "hearts", "spades"]
+			naipes: ["diams", "spades", "hearts", "clubs"]
 		}, opts);
 
 		this.naipes = opt.naipes;
@@ -339,14 +353,26 @@ function Deck(){
 		var fgcolor = "";
 		for(var a=0; a<this.naipes.length; a++){
 			var naipe = this.naipes[a];
-			if(naipe == "diams" || naipe == "hearts"){
-				bgcolor = opt.bgcolor_1;
-				fgcolor = opt.fgcolor_1;
-			}else{
-				bgcolor = opt.bgcolor_2;
-				fgcolor = opt.fgcolor_2;
+
+			if(naipe == "diams"){
+				bgcolor = opt.diams_bg;
+				fgcolor = opt.diams_fg;
 			}
 
+			if(naipe == "spades"){
+				bgcolor = opt.spades_bg;
+				fgcolor = opt.spades_fg;
+			}
+
+			if(naipe == "hearts"){
+				bgcolor = opt.hearts_bg;
+				fgcolor = opt.hearts_fg;
+			}
+
+			if(naipe == "clubs"){
+				bgcolor = opt.clubs_bg;
+				fgcolor = opt.clubs_fg;
+			}
 
 			for(var b=0; b<this.cartas.length; b++){
 				var id = this.cartas[b];
