@@ -32,6 +32,24 @@ function Render(){
 	this.bounds.na = this.bounds.w/2;
 	this.bounds.ns = this.bounds.w/5;
 
+	this.pixel_ratio = function(){
+		var canvas = $("<canvas></canvas>");
+		var ctx = canvas[0].getContext("2d");
+		var dpr = window.devicePixelRatio || 1;
+		var bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+		return dpr / bsr;
+	}
+
+	this.createCanvas = function(w, h, ratio){
+		if(!ratio){ ratio = this.pixel_ratio(); }
+		var canvas = $("<canvas></canvas>");
+		canvas.attr({width: w*ratio, height: h*ratio});
+		canvas.css({width: w*ratio, height: h*ratio});
+		var ctx = canvas[0].getContext("2d");
+		ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+		return canvas;
+	}
+
 	this.salas = function(data){
 		var salas = $(".lobby .salas");
 		salas.html("");
@@ -68,21 +86,16 @@ function Render(){
 	}
 
 	this.morto_btn = function(){
-		if(data_old.sala.morto.length <= 0 || flag_morto){
-			$(".player_deck").dialog({
-				"buttons":[
-				{text: "Baixar", class: "btn_terminar", click: function(){ baixar_jogo(); }}
-				]
-			});
-		}else{
-			$(".player_deck").dialog({
-				"buttons":[
-				{text: "Morto", class: "btn_morto", click: function(){ pegar_morto(); }},
-				{text: "Baixar", class: "btn_terminar", click: function(){ baixar_jogo(); }}
-				]
-			});
+		console.log(data_old.sala.players);
+		for(var player in data_old.sala.players){
+			var p = data_old.sala.players[player];
+			if(p && p.id == player_id){
+				if(data_old.sala.morto.length > 0 && flag_morto == false && p.deck.body.length <=0){
+					var btn_morto = $("<span class='btn btn_morto' onclick='pegar_morto();'>Pegar morto</span>");
+					$(".player_deck").prepend(btn_morto);
+				}
+			}
 		}
-
 		return false;
 	}
 
@@ -130,6 +143,7 @@ function Render(){
 		//console.log(data);
 		//var div = $(".players");
 		var div = $(".meio");
+		var btn_adm = $("<span class='btn btn_adm' onclick='menu_adm();'>...</span>");
 		//div.html("");
 		$(".players").html("");
 		var players = data.sala.players;
@@ -157,6 +171,7 @@ function Render(){
 				//div.append(p_html);
 
 				p_out.append(p_html);
+				p_out.prepend(btn_adm);
 				div.prepend(p_out);
 			}
 		}
@@ -178,11 +193,11 @@ function Render(){
 						var c_html = render.draw( c, 60, 90 );
 						c_html.css({position: "absolute", "left": 60/2*carta+"px"});
 						c_html.removeAttr("onclick");
-						span.css({"width": (60/2*j.length)+60+"px"});
+						span.css({"width": (60/2*j.length)+30+"px"});
 						span.append( c_html );
 					}
 					if(j.length >=7){
-						$(span.find(".carta")[j.length-1]).css({"-webkit-transform": "rotate(90deg)"});
+						$(span.find(".carta")[j.length-1]).css({"-webkit-transform": "translate(-30%, 16%) rotate(90deg)"});
 					}
 					if(classe == ".other_jogos"){
 						span.removeAttr("onclick");
@@ -348,6 +363,7 @@ function Render(){
 		var carta = $("<span class='carta' uid='"+c.uid+"' onclick='add_carta(this);'></span>");
 		var canvas = $("<canvas></canvas>");
 		canvas.attr({width: this.bounds.w, height: this.bounds.h});
+		//var canvas = this.createCanvas(this.bounds.w, this.bounds.h);
 		var ctx = canvas[0].getContext("2d");
 
 		ctx.fillStyle = c.bgcolor;
@@ -563,6 +579,7 @@ function sala_start_ok(data){
 	$(".lobby").hide();
 	$(".jogo").show();
 	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
+		/*
 		$(".player_deck").dialog({height: 300, width: 400, position: {at:"left bottom"},
 			"buttons":[
 			{text: "Morto", class: "btn_morto", click: function(){ pegar_morto(); }},
@@ -570,6 +587,7 @@ function sala_start_ok(data){
 			],
 			close: function( event, ui ) { arr_cartas = []; }
 		});
+		
 		$(".meio").dialog({minWidth: 250,
 			"buttons":[
 			//{text: "Próxima", class: "btn_continuar", click: function(){ proxima(); }},
@@ -577,6 +595,7 @@ function sala_start_ok(data){
 			{text: "...", class: "btn_adm", click: function(){ menu_adm(); }}
 			]
 		});
+		*/
 		sala_update_ok( cb_data );
 	} );
 	return false;
@@ -607,8 +626,8 @@ function menu_adm(){
 // Inicio [terminar_ok]
 function terminar_ok(data){
 	data_old = data;
-	$(".meio").dialog("destroy");
-	$(".player_deck").dialog("destroy");
+	//$(".meio").dialog("destroy");
+	//$(".player_deck").dialog("destroy");
 	$(".player_jogo").dialog("destroy");
 	$(".jogo").hide();
 	$(".lobby").show();
@@ -627,8 +646,8 @@ function deck_compra(){
 function display_cartas(){
 	arr_cartas = [];
 	$(".carta").removeClass("action");
-	$( ".meio" ).dialog();
-	$(".player_deck").dialog();
+	//$( ".meio" ).dialog();
+	//$(".player_deck").dialog();
 	return false;
 }
 // Fim [display_cartas]
@@ -715,7 +734,7 @@ function jogo_baixado(ind, pid){
 				var j = p.jogos[ind];
 				for(var carta in j.body){
 					var c = j.body[carta];
-					var c_html = render.draw( c, );
+					var c_html = render.draw( c );
 					div.append( c_html );
 				}
 			}
@@ -841,11 +860,13 @@ function sala_update_ok(data){
 	render.jogos( jogo_decide(jogo_pos[0].id).id, ".player_jogos" );
 	render.morto_btn();
 
-	//if(data.sala.morto.length <=0){
-		//$( ".meio" ).dialog({
-			//"buttons":[]
-		//});
-	//}
+	/*
+	$(".carta").each(function(){
+		var rand = Math.floor(Math.random() * 100) + 1;
+		$(this).attr({refresh: rand});
+	});
+	*/
+
 	return false;
 }
 // Fim [sala_update_ok]
