@@ -29,7 +29,7 @@
 <body>
 
  <!-- Inicio [lobby] -->
-	<div class="lobby" style="display: ;">
+	<div class="lobby">
 		<a class="btn" href="#" onclick="return sala_cria();">Criar Sala</a>
 		<a class="btn" href="#" onclick="return retomar();">Retomar</a>
 		<br/>
@@ -49,10 +49,6 @@
 
  <!-- Inicio [jogo] -->
 	<div class="jogo" style="display: none;">
-	<span class="other_jogos"></span>
-	<span class="player_jogos"></span>
-		<!--<span class="players"></span>-->
-
 		<span class="meio" title="Mesa">
 			<span class="wrap">
 				<span class="mesa" onclick="mesa();"></span>
@@ -60,10 +56,14 @@
 			</span>
 		</span>
 
+		<span class="other_jogos"></span>
+		<span class="player_jogos" onclick="return baixar_jogo();"></span>
+
+		<span class="player_deck" title="Suas cartas"></span>
+
 		<span class="player_jogo_deck" title="Jogo baixado"></span>
 		<span class="mesa_deck" title="Cartas da mesa"></span>
-		<span class="player_deck" title="Suas cartas"></span>
-		<span class="display_cartas" onclick="display_cartas();"><img src="client/imgs/cartas.svg" /></span>
+		<!--<span class="display_cartas" onclick="display_cartas();"><img src="client/imgs/cartas.svg" /></span>-->
 	</div>
 	<!-- Fim [jogo] -->
 
