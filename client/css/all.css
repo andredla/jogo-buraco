@@ -32,7 +32,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .players .player .morto {position: relative; display: inline-block; padding: 0.4em; border: 1px solid #c32c2c; border-radius: 50%;}
 .players .player .morto_on {position: relative; display: inline-block; padding: 0.4em; background-color: #e91f1f; border: 1px solid #c32c2c; border-radius: 50%;}
 .players .player .score {position: relative; display: block;}
-.btn_morto {color: #fff !important; background-color: #e91f1f !important; border: 1px solid #c32c2c !important;}
+.btn_morto {top: 50%; color: #fff !important; font-weight: bold; background-color: #ea4e4e !important; border: 1px solid #873333 !important; -webkit-transform: translateY(-50%);}
 
 .meio {position: absolute; display: inline-block; width: 100% !important; height: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
 .meio .wrap {position: relative; display: block; padding: 5px;}
@@ -41,13 +41,6 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .deck {position: relative; display: inline-block; cursor: pointer;}
 /*.deck .num, .mesa .num {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); padding: 0.2em 0.3em; color: #fff; background-color: #444; border-radius: 50%;}*/
 .deck .num, .mesa .num {position: absolute; display: inline-block; top: 0; right: 0; padding: 0.3em; color: #444; font-size: 14px; background-color: #ff0; border: 1px solid #e4e43c; border-radius: 50%; z-index: 3;}
-/*
-.mesa {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-160%, -50%); width: 70px; height: 110px; background-color: #EFEFEF; border: 1px solid #E2E2E2; cursor: pointer;}
-.mesa .carta {margin: 0;}
-
-.deck {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); cursor: pointer;}
-.deck .num {position: absolute; display: inline-block; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); padding: 0.2em 0.3em; color: #fff; background-color: #444;}
-*/
 
 .mesa_deck {position: absolute; display: inline-block; width: 100% !important;  overflow: auto; -webkit-overflow-scrolling: touch;}
 .player_deck {position: absolute; display: inline-block; width: 100% !important; height: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
@@ -58,7 +51,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .player_jogos {position: absolute; display: block; width: 100%; height: 50%; top: 50%; text-align: left; background-color: #F7FEFF; overflow: auto; -webkit-overflow-scrolling: touch;}
 .player_jogos .baixado, .other_jogos .baixado {position: relative; display: inline-block; margin: 4px; height: 90px;}
 
-.player_jogos .label, .other_jogos .label {position: absolute; display: inline-block; top: 0; right: 10%; padding: 0.2em; font-size: 14px; background-color: #ff0; border: 1px solid #e4e43c; z-index: 3;}
+.player_jogos .label, .other_jogos .label {position: absolute; display: inline-block; top: 0; right: 2%; padding: 0.2em 0.8em; font-size: 14px; font-weight: bold; background-color: #ff0; border: 1px solid #e4e43c; z-index: 3;}
 
 .destaque {border: 1px solid #00ff00 !important;}
 .destaque::after {position: absolute; content: ''; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 255, 0, 1); opacity: 0.1;}
@@ -79,6 +72,15 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 /* Fim [versao_1] */
 
 /* Inicio [versao_2] */
+.destaque {border: 1px solid #00ff00 !important; -webkit-transform: translateY(-5%);}
+.destaque::after {background: #00ff00; opacity: 0.2; z-index: 5;}
+
+.action {border: 1px solid #444444 !important;}
+.action::after {background: #444444; opacity: 0.2; z-index: 5;}
+
+.player_jogos .jogo_real, .other_jogos .jogo_real {color: #1a621a; background-color: #b5f3b5; border: 1px solid #5c985c;}
+.player_jogos .jogo_suja, .other_jogos .jogo_suja {color: #531313; background-color: #ff7373; border: 1px solid #bf4545;}
+
 .btn_float {float: right;}
 .btn_adm {padding: 0.4em;}
 .players {position: absolute; top: 50%; left: 0; -webkit-transform: translateY(-50%);}
@@ -86,7 +88,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .meio .wrap {position: absolute; display: inline-block; right: 0; top: 0; padding: 0;}
 .other_jogos {position: absolute; display: block; width: 100%; height: 30%; top: 13%; left: 0; text-align: left; background-color: #1FAB90; border: 1px solid #3D9080; overflow: auto;}
 .player_jogos {position: absolute; display: block; width: 100%; height: 37%; top: 43%; left: 0; text-align: left; background-color: #1FAB90; border: 1px solid #3D9080; overflow: auto;}
-.player_deck {position: absolute; display: inline-block; width: 100% !important; height: 20%; bottom: 0; left: 0; overflow: auto; background:#438175; -webkit-overflow-scrolling: touch;}
+.player_deck {position: absolute; display: inline-block; width: 100% !important; height: 20%; bottom: 0; left: 0; padding-top: 5px; overflow: auto; background:#438175; -webkit-overflow-scrolling: touch;}
 
 .meio {position: relative; display: block; width: inherit !important; height: 13%; top: 0;}
 .other_jogos {position: relative; display: block; width: inherit !important; height: 30%; top: 0;}
