@@ -205,7 +205,8 @@ function Render(){
 						$(" .player_jogo_deck").sortable();
 					}
 					if(p.jogos_label[jogo]){
-						span.append("<span class='label'>"+p.jogos_label[jogo]+"</span>");
+						var label = $("<span class='label jogo_"+p.jogos_label[jogo]+"'>"+p.jogos_label[jogo]+"</span>");
+						span.append(label);
 					}
 					div.append(span);
 				}
@@ -310,7 +311,7 @@ function Render(){
 	}
 
 	this.naipe = function(g, p, ctx, img){
-		var off = {x:10, y:10};
+		var off = {x:10, y:30};
 		var delta = {w: (this.bounds.w-off.x)/g.w, h: (this.bounds.h-off.y)/g.h};
 		//this.draw_grid(g, ctx);
 
@@ -481,7 +482,7 @@ function Render(){
 		carta.css({"border-color": borda});
 
 		var ind = $("<span class='ind'>"+cartas[c.id+""].label+"</span>");
-		ind.css({color: c.fgcolor, "font-size": this.bounds.w/5 + "px"});
+		ind.css({color: c.fgcolor, "font-size": this.bounds.w/4.2 + "px"});
 		carta.append(ind);
 
 		carta.prepend( canvas );
