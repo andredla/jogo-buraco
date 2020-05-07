@@ -4,6 +4,7 @@ html, body {height: 100%; text-align: center; background: #f6f6f6; font-family: 
 canvas {position: relative; display: inline-block; vertical-align: middle; -webkit-transform: translate3d(0,0,0);}
 
 .btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; background-color: #ccc; color: #444; border: 1px solid #ccc; cursor: pointer;}
+.btn_menor {font-size: 14px; padding: 0.5em;}
 
 /* Inicio [versao_1] */
 .lobby {position: relative; display: inline-block; padding: 10px; margin: 10px;}
@@ -64,6 +65,11 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 /*.ui-dialog .ui-resizable-e, .ui-dialog .ui-resizable-s, .ui-dialog .ui-resizable-w, .ui-dialog .ui-resizable-se {padding: 10px;}*/
 
 .display_cartas {position: absolute; display: inline-block; right: 0; bottom: 0; -webkit-transform: scale(0.8); cursor: pointer;}
+
+.editar_deck_janela .grupo {position: relative; display: block;}
+.editar_deck_janela .grupo_controle {position: relative; display: inline-block;}
+.editar_deck_janela .grupo_controle input {display: block;}
+.editar_deck_janela .grupo_preview {position: relative; display: inline-block;}
 
 .menu_adm {position: absolute; display: inline-block;}
 .menu_adm_opt > .ui-dialog-titlebar { display: none;}
