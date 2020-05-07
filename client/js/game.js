@@ -617,6 +617,10 @@ function sala_start_ok(data){
 	//console.log(data);
 	sala_id = data.sala.id;
 	var cb_data = data;
+	$(".mesa").html("");
+	$(".other_jogos").html("");
+	$(".player_jogos").html("");
+	$(".player_deck").html("");
 	$(".lobby").hide();
 	$(".jogo").show();
 	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
