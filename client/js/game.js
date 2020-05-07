@@ -50,6 +50,35 @@ function Render(){
 		return canvas;
 	}
 
+	this.audio_play = function(){
+		var acao = data_old.acao;
+		if(acao && acao.audio){
+			//console.log(acao);
+			var audio = $(".audio_"+acao.audio.src);
+			if($.inArray(player_id, acao.audio.in) >= 0){
+				audio[0].play();
+			}
+		}
+		return false;
+	}
+
+	this.anima = function(){
+		var acao = data_old.acao;
+		delete data_old.sala["acao"];
+		if(acao && acao.anima){
+			for(var carta in acao.anima.cartas){
+				var uid = acao.anima.cartas[carta];
+				$("span[uid='"+uid+"']").each(function(){
+					console.log(this);
+					$(this).addClass("animated "+acao.anima.tipo).bind("animationend", function(){
+						$(this).removeClass("animated "+acao.anima.tipo);
+					});
+				});
+			}
+		}
+		return false;
+	}
+
 	this.salas = function(data){
 		var salas = $(".lobby .salas");
 		salas.html("");
@@ -86,7 +115,7 @@ function Render(){
 	}
 
 	this.morto_btn = function(){
-		console.log(data_old.sala.players);
+		//console.log(data_old.sala.players);
 		for(var player in data_old.sala.players){
 			var p = data_old.sala.players[player];
 			if(p && p.id == player_id){
@@ -119,6 +148,7 @@ function Render(){
 		for(var carta in mesa){
 			var c = mesa[carta];
 			var c_html = render.draw( c );
+			c_html.removeAttr("onclick");
 			mesa_deck.append( c_html );
 		}
 		$(".mesa_deck").dialog({
@@ -494,6 +524,16 @@ function Render(){
 // Fim [render]
 
 // Inicio [funcao]
+// Inicio [audio_load]
+function audio_load(audio){
+	var audio = $(".audio_"+audio);
+	audio[0].play();
+	audio[0].pause();
+	audio[0].currentTime = 0;
+	return false;
+}
+// Fim [audio_load]
+
 // Inicio [conn_init]
 function conn_init(data){
 	if(data.socket_id){
@@ -542,7 +582,6 @@ function sala_cria(){
 function sala_cria_ok(data){
 	//console.log( data );
 	render.salas( data );
-
 	return false;
 }
 // Fim [sala_cria_ok]
@@ -550,6 +589,7 @@ function sala_cria_ok(data){
 // Inicio [sala_entra]
 function sala_entra(lugar, sala){
 	//console.log(lugar, sala);
+	audio_load("atencao");
 	var nome = $("#player_nome").val();
 	$.cookie("player_nome", nome);
 	data = {id: player_id, socket_id: socket_id, nome: nome, sala: sala, lugar: lugar};
@@ -656,6 +696,7 @@ function display_cartas(){
 // Inicio [add_carta]
 function add_carta(carta){
 	//console.log(arr_cartas);
+	$(".player_deck .carta").removeClass("destaque");
 	var c = $(carta);
 	var flag = $.inArray(c.attr("uid"), arr_cartas);
 	if(flag < 0){
@@ -826,6 +867,7 @@ function pegar_morto(){
 // Inicio [proxima]
 function proxima(){
 	$(".menu_adm").dialog("close");
+	$(".other_jogos").html("");
 	socket.emit("proxima", {player: player_id, sala: sala_id});
 	return false;
 }
@@ -860,6 +902,9 @@ function sala_update_ok(data){
 	render.player_deck( data );
 	render.jogos( jogo_decide(jogo_pos[0].id).id, ".player_jogos" );
 	render.morto_btn();
+
+	render.audio_play();
+	render.anima();
 
 	/*
 	$(".carta").each(function(){
