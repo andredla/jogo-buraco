@@ -15,6 +15,7 @@ function Sala(){
 	this.started = false;
 	this.mesa = new Deck();
 	this.vez = null;
+	this.vez_ultima = null;
 	this.lugares = [];
 
 	this.cria = function(){
@@ -133,6 +134,7 @@ function Sala(){
 
 	this.start = function(){
 		this.started = true;
+		this.lugares = [];
 		this.mesa = new Deck();
 		var d1 = new Deck();
 		d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
@@ -193,8 +195,16 @@ function Sala(){
 
 		this.mesa.body.push( this.deck.compra() );
 
-		var rand = Math.floor(Math.random() * this.lugares.length);
-		this.vez = rand;
+		if(this.vez_ultima == null){
+			var rand = Math.floor(Math.random() * this.lugares.length);
+			this.vez = rand;
+			this.vez_ultima = this.vez;
+		}else{
+			this.vez = this.vez_ultima;
+			this.add_vez();
+			this.vez_ultima = this.vez;
+		}
+
 
 		this.sock_change("lobby", this.id);
 		return false;
@@ -767,7 +777,10 @@ function player_discarta(data){
 	s.add_mesa(c);
 	s.add_vez();
 
-	io.in(data.sala).emit("sala_update_ok", {sala: s});
+	var audio_player = s.players[s.vez].id;
+	var acao = {audio:{src: "atencao", in: [audio_player]}, anima:{tipo: "slideInLeft", cartas: [c.uid]}};
+
+	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
 // Fim [player_discarta]
@@ -806,12 +819,14 @@ function baixar_jogo(data){
 	console.log("-----------------");
 	console.log("baixar_jogo...");
 	console.log(data);
+	var anima_cartas = [];
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
 	var p_dest = s.findPlayer(data.player_dest);
 	var d1 = new Deck();
 	for(var carta in data.cartas){
 		var uid = data.cartas[carta];
+		anima_cartas.push(uid);
 		var c = p.player.deck.find_carta(uid);
 		if(c){
 			d1.body.push(c);
@@ -825,7 +840,9 @@ function baixar_jogo(data){
 	p_dest.player.jogos[p_dest.player.jogos.length-1].order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
-	io.in(data.sala).emit("sala_update_ok", {sala: s});
+
+	var acao = {anima:{tipo: "slideInUp", cartas: anima_cartas}};
+	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
 // Fim [baixar_jogo]
@@ -835,11 +852,13 @@ function baixar_jogo_add(data){
 	console.log("-----------------");
 	console.log("baixar_jogo_add...");
 	console.log(data);
+	var anima_cartas = [];
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
 	var p_dest = s.findPlayer(data.player_dest);
 	for(var carta in data.cartas){
 		var uid = data.cartas[carta];
+		anima_cartas.push(uid);
 		var c = p.player.deck.find_carta(uid);
 		//console.log(p.player.jogos[data.jogo]);
 		//p.player.jogos[data.jogo].body.push(c);
@@ -853,7 +872,8 @@ function baixar_jogo_add(data){
 	p_dest.player.jogos[data.jogo].order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
-	io.in(data.sala).emit("sala_update_ok", {sala: s});
+	var acao = {anima:{tipo: "slideInUp", cartas: anima_cartas}};
+	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
 // Fim [baixar_jogo_add]
