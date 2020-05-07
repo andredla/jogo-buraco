@@ -20,6 +20,7 @@
 <script language="JavaScript" src="client/js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
 <script language="JavaScript" src="client/js/jquery_cookie.js" type="text/javascript"></script>
 <script language="JavaScript" src="client/js/tinycolor.js" type="text/javascript"></script>
+<script language="JavaScript" src="client/js/jquery.drawrpalette-min.js" type="text/javascript"></script>
 <script language="JavaScript" src="client/js/biblioteca.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var socket = io();
@@ -32,12 +33,61 @@
 	<div class="lobby">
 		<a class="btn" href="#" onclick="return sala_cria();">Criar Sala</a>
 		<a class="btn" href="#" onclick="return retomar();">Retomar</a>
+		<!--<a class="btn" href="#" onclick="return editar_deck();">Editar baralho</a>-->
 		<br/>
 		<input type="text" id="player_nome" name="nome" value="">
+
+		<input type="hidden" id="diams_bg" value="#ffffff">
+		<input type="hidden" id="diams_fg" value="#ff0000">
+		<input type="hidden" id="spades_bg" value="#ffffff">
+		<input type="hidden" id="spades_fg" value="#444444">
+		<input type="hidden" id="hearts_bg" value="#ffffff">
+		<input type="hidden" id="hearts_fg" value="#ff0000">
+		<input type="hidden" id="clubs_bg" value="#ffffff">
+		<input type="hidden" id="clubs_fg" value="#444444">
 
 		<span class="salas"></span>
 	</div>
 	<!-- Fim [lobby] -->
+
+	<!-- Inicio [editar_deck_janela] -->
+	<div class="editar_deck_janela" title="Editar baralho" style="display: none;">
+		<span class="grupo diams">
+			<span class="grupo_controle">
+				<input type="text" class="ctl_bg" value="#ffffff" />
+				<input type="text" class="ctl_fg" value="#ff0000" />
+			</span>
+			<span class="grupo_preview"></span>
+		</span>
+		<span class="grupo spades">
+			<span class="grupo_controle">
+				<input type="text" class="ctl_bg" value="#ffffff" />
+				<input type="text" class="ctl_fg" value="#444444" />
+			</span>
+			<span class="grupo_preview"></span>
+		</span>
+		<span class="grupo hearts">
+			<span class="grupo_controle">
+				<input type="text" class="ctl_bg" value="#ffffff" />
+				<input type="text" class="ctl_fg" value="#ff0000" />
+			</span>
+			<span class="grupo_preview"></span>
+		</span>
+		<span class="grupo clubs">
+			<span class="grupo_controle">
+				<input type="text" class="ctl_bg" value="#ffffff" />
+				<input type="text" class="ctl_fg" value="#444444" />
+			</span>
+			<span class="grupo_preview"></span>
+		</span>
+	</div>
+	<!-- Fim [editar_deck_janela] -->
+
+	<!-- Inicio [color_picker_janela] -->
+	<div class="color_picker_janela" title="Selecione uma cor" style="display: none;">
+		<input type="text" id="color_picker_temp" value="">
+	</div>
+	<!-- Fim [color_picker_janela] -->
 
 	<!-- Inicio [menu_adm] -->
 	<div class="menu_adm" style="display: none;">
