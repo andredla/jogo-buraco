@@ -17,6 +17,7 @@ function Sala(){
 	this.vez = null;
 	this.vez_ultima = null;
 	this.lugares = [];
+	this.cores = {diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
 
 	this.cria = function(){
 		// Create a unique Socket.IO Room
@@ -137,11 +138,13 @@ function Sala(){
 		this.lugares = [];
 		this.mesa = new Deck();
 		var d1 = new Deck();
-		d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
+		//d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
+		d1.init({diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#D03737"});
 		d1.shuffle();
 
 		var d2 = new Deck();
-		d2.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
+		//d2.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
+		d2.init({diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#1313AF"});
 		d2.shuffle();
 
 		this.deck = new Deck();
@@ -599,6 +602,7 @@ exports.initGame = function(sio, socket){
 
 	gameSocket.on("retomar", retomar);
 	gameSocket.on("connect_refresh", connect_refresh);
+	gameSocket.on("editar_deck_aplicar", editar_deck_aplicar);
 	gameSocket.on("sala_cria", sala_cria);
 	gameSocket.on("sala_entra", sala_entra);
 	gameSocket.on("sala_start", sala_start);
@@ -695,6 +699,26 @@ function socket_emit_all(action, data){
 	return false;
 }
 // Fim [socket_emit_all]
+
+// Inicio [editar_deck_aplicar]
+function editar_deck_aplicar(data){
+	console.log("-----------------");
+	console.log("editar_deck_aplicar...");
+	console.log(data);
+	var sala = salas[data.sala];
+	var cores = data.cores;
+	console.log(sala);
+	sala.cores.diams.bg = cores.diams.bg;
+	sala.cores.diams.fg = cores.diams.fg;
+	sala.cores.spades.bg = cores.spades.bg;
+	sala.cores.spades.fg = cores.spades.fg;
+	sala.cores.hearts.bg = cores.hearts.bg;
+	sala.cores.hearts.fg = cores.hearts.fg;
+	sala.cores.clubs.bg = cores.clubs.bg;
+	sala.cores.clubs.fg = cores.clubs.fg;
+	return false;
+}
+// Fim [editar_deck_aplicar]
 
 // Inicio [sala_cria]
 function sala_cria(data) {
