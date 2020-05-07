@@ -16,6 +16,7 @@ $.getJSON("/client/js/cartas.json", function(json){
 // Inicio [socket_recebe]
 socket.on("conn_init", conn_init);
 socket.on("console", console_log);
+socket.on("editar_deck_ver_ok", editar_deck_ver_ok);
 socket.on("sala_cria_ok", sala_cria_ok);
 socket.on("sala_entra_ok", sala_entra_ok);
 socket.on("sala_start_ok", sala_start_ok);
@@ -99,7 +100,7 @@ function Render(){
 		salas.html("");
 
 		for(var s in data.salas){
-			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span></span></br>");
+			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span><br/><span onclick='editar_deck_ver(\""+s+"\");'>Ver baralho</span></span></br>");
 			salas.append( sala );
 			for(var p in data.salas[s].players){
 				var player = data.salas[s].players[p];
@@ -674,7 +675,6 @@ function ColorPicker(){
 }
 // Fim [ColorPicker]
 
-// Inicio [funcao]
 // Inicio [editar_deck]
 function editar_deck(sala){
 	$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
@@ -800,6 +800,48 @@ function retomar(){
 	return false;
 }
 // Fim [retomar]
+
+// Inicio [editar_deck_ver]
+function editar_deck_ver(sala){
+	socket.emit("editar_deck_ver", {sala: sala, player: player_id, socket: socket_id });
+	return false;
+}
+// Fim [editar_deck_ver]
+
+// Inicio [editar_deck_ver_ok]
+function editar_deck_ver_ok(data){
+	var s = data.sala;
+	$("#diams_bg").val(s.cores.diams.bg);
+	$("#diams_fg").val(s.cores.diams.fg);
+	$("#spades_bg").val(s.cores.spades.bg);
+	$("#spades_fg").val(s.cores.spades.fg);
+	$("#hearts_bg").val(s.cores.hearts.bg);
+	$("#hearts_fg").val(s.cores.hearts.fg);
+	$("#clubs_bg").val(s.cores.clubs.bg);
+	$("#clubs_fg").val(s.cores.clubs.fg);
+
+	$(".editar_deck_janela .diams .ctl_bg").val(s.cores.diams.bg);
+	$(".editar_deck_janela .diams .ctl_fg").val(s.cores.diams.fg);
+	$(".editar_deck_janela .spades .ctl_bg").val(s.cores.spades.bg);
+	$(".editar_deck_janela .spades .ctl_fg").val(s.cores.spades.fg);
+	$(".editar_deck_janela .hearts .ctl_bg").val(s.cores.hearts.bg);
+	$(".editar_deck_janela .hearts .ctl_fg").val(s.cores.hearts.fg);
+	$(".editar_deck_janela .clubs .ctl_bg").val(s.cores.clubs.bg);
+	$(".editar_deck_janela .clubs .ctl_fg").val(s.cores.clubs.fg);
+
+	$(".editar_deck_janela .diams .ctl_bg").drawrpalette("set", s.cores.diams.bg);
+	$(".editar_deck_janela .diams .ctl_fg").drawrpalette("set", s.cores.diams.fg);
+	$(".editar_deck_janela .spades .ctl_bg").drawrpalette("set", s.cores.spades.bg);
+	$(".editar_deck_janela .spades .ctl_fg").drawrpalette("set", s.cores.spades.fg);
+	$(".editar_deck_janela .hearts .ctl_bg").drawrpalette("set", s.cores.hearts.bg);
+	$(".editar_deck_janela .hearts .ctl_fg").drawrpalette("set", s.cores.hearts.fg);
+	$(".editar_deck_janela .clubs .ctl_bg").drawrpalette("set", s.cores.clubs.bg);
+	$(".editar_deck_janela .clubs .ctl_fg").drawrpalette("set", s.cores.clubs.fg);
+
+	editar_deck(s.id);
+	return false;
+}
+// Fim [editar_deck_ver_ok]
 
 // Inicio [sala_cria]
 function sala_cria(){
