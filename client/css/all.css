@@ -24,7 +24,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .carta {position: relative; display: inline-block; margin: 2px; background-color: #fff; border: 1px solid #ddd; cursor: pointer; z-index: 2; -webkit-transform: translate3d(0,0,0); transition: all 0.1s;}
 .carta .ind {position: absolute; display: inline-block; left: 5%; top: 5%; font-size: 18px; font-weight: bold; z-index: 3; -webkit-transform: translate3d(0,0,0);}
 
-.jogo {position: relative; display: block; height: 100%;}
+.jogo {position: relative; display: block; height: 100%; background: #438175;}
 
 .players {position: relative; display: inline-block;}
 .players .player {position: relative; display: inline-block; padding: 5px; margin: 5px; background-color: #fff; border: 1px solid #eee; cursor: pointer;}
@@ -64,7 +64,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .ui-dialog .ui-dialog-content {padding: 0 !important;}
 /*.ui-dialog .ui-resizable-e, .ui-dialog .ui-resizable-s, .ui-dialog .ui-resizable-w, .ui-dialog .ui-resizable-se {padding: 10px;}*/
 
-.display_cartas {position: absolute; display: inline-block; right: 0; bottom: 0; -webkit-transform: scale(0.8); cursor: pointer;}
+.display_cartas {position: absolute; display: inline-block; right: 1%; bottom: 1%; width: 50px; height: 50px; cursor: pointer;}
 
 .editar_deck_janela .grupo {position: relative; display: block;}
 .editar_deck_janela .grupo_controle {position: relative; display: inline-block;}
