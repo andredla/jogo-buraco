@@ -50,6 +50,21 @@ function Render(){
 		return canvas;
 	}
 
+	this.preview = function(naipe){
+		var naipe_bg = $("#"+naipe+"_bg").val();
+		var naipe_fg = $("#"+naipe+"_fg").val();
+
+		var span = $("<span></span>");
+		for(var a=1; a<=13; a++){
+			var c = {uid: "x"+a, id: a, naipe: naipe, bgcolor: naipe_bg, fgcolor: naipe_fg};
+			var c_html = this.draw(c, 50, 90);
+			c_html.removeAttr("onclick");
+			span.append(c_html);
+		}
+
+		return span.children();
+	}
+
 	this.audio_play = function(){
 		var acao = data_old.acao;
 		if(acao && acao.audio){
@@ -84,7 +99,7 @@ function Render(){
 		salas.html("");
 
 		for(var s in data.salas){
-			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</a></span></span></br>");
+			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span></span></br>");
 			salas.append( sala );
 			for(var p in data.salas[s].players){
 				var player = data.salas[s].players[p];
@@ -523,7 +538,222 @@ function Render(){
 }
 // Fim [render]
 
+// Inicio [ColorPicker]
+function ColorPicker(){
+	this.label = $("<span class='color_picker_label'></span>");
+	this.obj = $("<span class='color_picker_obj'></span>");
+	this.block = $("<canvas class='color_block' width='100' height='100'></canvas>");
+	this.strip = $("<canvas class='color_strip' width='30' height='100'></canvas>");
+	this.ctx_b = this.block[0].getContext("2d");
+	this.ctx_s = this.strip[0].getContext("2d");
+	this.drag = false;
+
+	this.init = function(cb){
+	 var block_wh = {w: parseInt(this.block.css("width")), h: parseInt(this.block.css("height"))};
+	 var strip_wh = {w: parseInt(this.strip.css("width")), h: parseInt(this.strip.css("height"))};
+
+		var rgbaColor = "rgba(255,0,0,1)";
+		this.ctx_b.rect(0, 0, block_wh.w, block_wh.h);
+		this.fillGradient(this.ctx_b, this.ctx_s, rgbaColor);
+
+		this.ctx_s.rect(0, 0, strip_wh.w, strip_wh.h);
+		var grd1 = this.ctx_s.createLinearGradient(0, 0, 0, strip_wh.h);
+		grd1.addColorStop(0, 'rgba(255, 0, 0, 1)');
+		grd1.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
+		grd1.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
+		grd1.addColorStop(0.51, 'rgba(0, 255, 255, 1)');
+		grd1.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
+		grd1.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
+		grd1.addColorStop(1, 'rgba(255, 0, 0, 1)');
+		this.ctx_s.fillStyle = grd1;
+		this.ctx_s.fill();
+
+		drag = this.drag;
+		label = this.label;
+		ctx_b = this.ctx_b;
+		ctx_s = this.ctx_s;
+		changeColor = this.changeColor;
+		change_block = this.change_block;
+		fillGradient = this.fillGradient;
+
+		this.block.bind("mousedown touchstart", function(ev){
+			ev.preventDefault();
+			drag = true;
+			changeColor(ev, ctx_b, cb);
+		});
+
+		this.block.bind("mousemove touchmove", function(ev){
+			ev.preventDefault();
+			if(drag){
+				changeColor(ev, ctx_b, cb);
+			}
+		});
+
+		this.block.bind("mouseup touchend", function(ev){
+			ev.preventDefault();
+			drag = false;
+		});
+
+		this.strip.bind("mousedown touchstart", function(ev){
+			ev.preventDefault();
+			drag = true;
+			change_block(ev, ctx_b, ctx_s);
+		});
+
+		this.strip.bind("mousemove touchmove", function(ev){
+			ev.preventDefault();
+			if(drag){
+				change_block(ev, ctx_b, ctx_s);
+			}
+		});
+
+		this.strip.bind("mouseup touchend", function(ev){
+			ev.preventDefault();
+			drag = false;
+		});
+
+		var div = $("<div></div>");
+		div.append(this.label);
+		this.obj.append(this.block);
+		this.obj.append(this.strip);
+		div.append(this.obj);
+
+		return div;
+	}
+
+	this.fillGradient = function(ctx1, ctx2, rgba){
+		//console.log("fillGradient", ctx1, ctx2, rgba);
+		ctx1.fillStyle = rgba;
+		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
+
+		var grdWhite = ctx2.createLinearGradient(0, 0, ctx1.canvas.clientWidth, 0);
+		grdWhite.addColorStop(0, 'rgba(255,255,255,1)');
+		grdWhite.addColorStop(1, 'rgba(255,255,255,0)');
+		ctx1.fillStyle = grdWhite;
+		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
+
+		var grdBlack = ctx2.createLinearGradient(0, 0, 0, ctx1.canvas.clientHeight);
+		grdBlack.addColorStop(0, 'rgba(0,0,0,0)');
+		grdBlack.addColorStop(1, 'rgba(0,0,0,1)');
+		ctx1.fillStyle = grdBlack;
+		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
+		//return false;
+	}
+
+	this.changeColor = function(e, ctx1, cb){
+		if(e != undefined){
+	  ex = e.pageX || e.originalEvent.touches[0].pageX;
+	  ey = e.pageY || e.originalEvent.touches[0].pageY;
+	  var b = ctx1.canvas.getBoundingClientRect();
+	  x = Math.floor(ex - b.left);
+	  y = Math.floor(ey - b.top);
+	  var imageData = ctx1.getImageData(x, y, 1, 1).data;
+	  rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
+	  label.css({"background-color": rgbaColor});
+	  //$("#cor").val(rgbaColor);
+	  //ret = rgbaColor;
+	  cb(rgbaColor);
+		}
+		return false;
+	}
+
+	this.change_block = function(e, ctx1, ctx2){
+		if(e != undefined){
+			ex = e.pageX || e.originalEvent.touches[0].pageX;
+			ey = e.pageY || e.originalEvent.touches[0].pageY;
+	  var b = ctx2.canvas.getBoundingClientRect();
+	  x = Math.floor(ex - b.left);
+	  y = Math.floor(ey - b.top);
+			var imageData = ctx2.getImageData(x, y, 1, 1).data;
+			rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
+			fillGradient(ctx1, ctx2, rgbaColor);
+		}
+		return false;
+	}
+	return false;
+}
+// Fim [ColorPicker]
+
 // Inicio [funcao]
+// Inicio [editar_deck]
+function editar_deck(sala){
+	$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
+	$(".editar_deck_janela .spades .grupo_preview").html( render.preview("spades") );
+	$(".editar_deck_janela .hearts .grupo_preview").html( render.preview("hearts") );
+	$(".editar_deck_janela .clubs .grupo_preview").html( render.preview("clubs") );
+
+	$(".editar_deck_janela .diams .ctl_bg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#diams_bg").val(hexcolor);
+		$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
+	});
+	$(".editar_deck_janela .diams .ctl_fg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#diams_fg").val(hexcolor);
+		$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
+	});
+
+	$(".editar_deck_janela .spades .ctl_bg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#spades_bg").val(hexcolor);
+		$(".editar_deck_janela .spades .grupo_preview").html( render.preview("spades") );
+	});
+	$(".editar_deck_janela .spades .ctl_fg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#spades_fg").val(hexcolor);
+		$(".editar_deck_janela .spades .grupo_preview").html( render.preview("spades") );
+	});
+
+	$(".editar_deck_janela .hearts .ctl_bg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#hearts_bg").val(hexcolor);
+		$(".editar_deck_janela .hearts .grupo_preview").html( render.preview("hearts") );
+	});
+	$(".editar_deck_janela .hearts .ctl_fg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#hearts_fg").val(hexcolor);
+		$(".editar_deck_janela .hearts .grupo_preview").html( render.preview("hearts") );
+	});
+
+	$(".editar_deck_janela .clubs .ctl_bg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#clubs_bg").val(hexcolor);
+		$(".editar_deck_janela .clubs .grupo_preview").html( render.preview("clubs") );
+	});
+	$(".editar_deck_janela .clubs .ctl_fg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#clubs_fg").val(hexcolor);
+		$(".editar_deck_janela .clubs .grupo_preview").html( render.preview("clubs") );
+	});
+
+	$(".editar_deck_janela .diams .ctl_bg, .editar_deck_janela .diams .ctl_fg, .editar_deck_janela .spades .ctl_bg, .editar_deck_janela .spades .ctl_fg, .editar_deck_janela .hearts .ctl_bg, .editar_deck_janela .hearts .ctl_fg, .editar_deck_janela .clubs .ctl_bg, .editar_deck_janela .clubs .ctl_fg").bind("open.drawrpalette", function(){
+		$(".editar_deck_janela").css({overflow: "visible"});
+	});
+	$(".editar_deck_janela .diams .ctl_bg, .editar_deck_janela .diams .ctl_fg, .editar_deck_janela .spades .ctl_bg, .editar_deck_janela .spades .ctl_fg, .editar_deck_janela .hearts .ctl_bg, .editar_deck_janela .hearts .ctl_fg, .editar_deck_janela .clubs .ctl_bg, .editar_deck_janela .clubs .ctl_fg").bind("close.drawrpalette", function(){
+		$(".editar_deck_janela").css({overflow: "auto"});
+	});
+
+	//$(".editar_deck_janela .diams .ctl_bg").drawrpalette("set","#ffffff");
+	//$(".editar_deck_janela .diams .ctl_fg").drawrpalette("set","#ff0000");
+
+	$(".editar_deck_janela").dialog({ width: 900, height: 600,
+		"buttons":[
+		{text: "Aplicar", class: "btn", click: function(){ editar_deck_aplicar(sala); }}
+		]
+	});
+	return false;
+}
+// Fim [editar_deck]
+
+// Inicio [editar_deck_aplicar]
+function editar_deck_aplicar(sala){
+	var diams_bg = $("#diams_bg").val();
+	var diams_fg = $("#diams_fg").val();
+	var spades_bg = $("#spades_bg").val();
+	var spades_fg = $("#spades_fg").val();
+	var hearts_bg = $("#hearts_bg").val();
+	var hearts_fg = $("#hearts_fg").val();
+	var clubs_bg = $("#clubs_bg").val();
+	var clubs_fg = $("#clubs_fg").val();
+	var cores = {diams:{bg: diams_bg, fg: diams_fg}, spades: {bg: spades_bg, fg: spades_fg}, hearts: {bg: hearts_bg, fg: hearts_fg}, clubs: {bg: clubs_bg, fg: clubs_fg}};
+	socket.emit("editar_deck_aplicar", {sala: sala, player: player_id, cores: cores});
+	$(".editar_deck_janela").dialog("close");
+	return false;
+}
+// Fim [editar_deck_aplicar]
+
 // Inicio [audio_load]
 function audio_load(audio){
 	var audio = $(".audio_"+audio);
@@ -623,30 +853,16 @@ function sala_start_ok(data){
 	$(".player_deck").html("");
 	$(".lobby").hide();
 	$(".jogo").show();
-	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
-		/*
-		$(".player_deck").dialog({height: 300, width: 400, position: {at:"left bottom"},
-			"buttons":[
-			{text: "Morto", class: "btn_morto", click: function(){ pegar_morto(); }},
-			{text: "Baixar", class: "btn_terminar", click: function(){ baixar_jogo(); }}
-			],
-			close: function( event, ui ) { arr_cartas = []; }
-		});
-		
-		$(".meio").dialog({minWidth: 250,
-			"buttons":[
-			//{text: "Próxima", class: "btn_continuar", click: function(){ proxima(); }},
-			//{text: "Terminar", class: "btn_terminar", click: function(){ terminar(); }}
-			{text: "...", class: "btn_adm", click: function(){ menu_adm(); }}
-			]
-		});
-		*/
-		sala_update_ok( cb_data );
-	} );
+
+	sala_update_ok( cb_data );
+	//render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
+		//sala_update_ok( cb_data );
+	//});
 	return false;
 }
 // Fim [sala_start_ok]
 
+// Inicio [menu_adm]
 function menu_adm(){
 	$(".menu_adm").dialog({
 	    modal: true,
@@ -667,6 +883,7 @@ function menu_adm(){
 	$(".menu_adm").dialog("open");
 	return false;
 }
+// Fim [menu_adm]
 
 // Inicio [terminar_ok]
 function terminar_ok(data){
@@ -925,4 +1142,8 @@ function sala_update_ok(data){
 $(function(){
 	$("#player_nome").val( $.cookie("player_nome") );
 	render = new Render();
+	bi.LightboxExibe({lightbox: "load"});
+	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
+		bi.LightboxEsconde();
+	});
 });
