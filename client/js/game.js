@@ -941,7 +941,9 @@ function terminar_ok(data){
 
 // Inicio [deck_compra]
 function deck_compra(){
-	socket.emit("deck_compra", {sala: sala_id, player: player_id});
+	if(arr_cartas.length <= 0){
+		socket.emit("deck_compra", {sala: sala_id, player: player_id});
+	}
 	return false;
 }
 // Fim [deck_compra]
