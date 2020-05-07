@@ -3,7 +3,7 @@
 html, body {height: 100%; text-align: center; background: #f6f6f6; font-family: Arial; font-size: 16px; -webkit-user-select: none; overflow: hidden;}
 canvas {position: relative; display: inline-block; vertical-align: middle; -webkit-transform: translate3d(0,0,0);}
 
-.btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; background-color: #ccc; border: 1px solid #ccc; cursor: pointer;}
+.btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; background-color: #ccc; color: #444; border: 1px solid #ccc; cursor: pointer;}
 
 /* Inicio [versao_1] */
 .lobby {position: relative; display: inline-block; padding: 10px; margin: 10px;}
@@ -20,7 +20,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .sala .opts {position: relative; display: block; background-color: #444; border: 1px solid #000;}
 .sala .opts span {position: relative; display: inline-block; padding: 0.5em; margin: 0.1em; background-color: #eee; cursor: pointer;}
 
-.carta {position: relative; display: inline-block; margin: 2px; background-color: #fff; border: 1px solid #ddd; cursor: pointer; z-index: 2; -webkit-transform: translate3d(0,0,0);}
+.carta {position: relative; display: inline-block; margin: 2px; background-color: #fff; border: 1px solid #ddd; cursor: pointer; z-index: 2; -webkit-transform: translate3d(0,0,0); transition: all 0.1s;}
 .carta .ind {position: absolute; display: inline-block; left: 5%; top: 5%; font-size: 18px; font-weight: bold; z-index: 3; -webkit-transform: translate3d(0,0,0);}
 
 .jogo {position: relative; display: block; height: 100%;}
@@ -75,8 +75,11 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .destaque {border: 1px solid #00ff00 !important; -webkit-transform: translateY(-5%);}
 .destaque::after {background: #00ff00; opacity: 0.2; z-index: 5;}
 
-.action {border: 1px solid #444444 !important;}
+.action {border: 1px solid #444444 !important; -webkit-transform: translateY(-5%);}
 .action::after {background: #444444; opacity: 0.2; z-index: 5;}
+
+.ui-dialog .player_jogo_deck, .ui-dialog .mesa_deck {padding-top: 10px !important;}
+.player_jogo_deck .carta, .mesa_deck .carta {transition: none;}
 
 .player_jogos .jogo_real, .other_jogos .jogo_real {color: #1a621a; background-color: #b5f3b5; border: 1px solid #5c985c;}
 .player_jogos .jogo_suja, .other_jogos .jogo_suja {color: #531313; background-color: #ff7373; border: 1px solid #bf4545;}
@@ -91,8 +94,8 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .player_deck {position: absolute; display: inline-block; width: 100% !important; height: 20%; bottom: 0; left: 0; padding-top: 5px; overflow: auto; background:#438175; -webkit-overflow-scrolling: touch;}
 
 .meio {position: relative; display: block; width: inherit !important; height: 13%; top: 0;}
-.other_jogos {position: relative; display: block; width: inherit !important; height: 30%; top: 0;}
-.player_jogos {position: relative; display: block; width: inherit !important; height: 37%; top: 0;}
+.other_jogos {position: relative; display: block; width: inherit !important; height: 33%; top: 0;}
+.player_jogos {position: relative; display: block; width: inherit !important; height: 34%; top: 0;}
 .player_deck {position: relative; display: block; width: inherit !important; height: 20%; top: 0;}
 /* Fim [versao_2] */
 
