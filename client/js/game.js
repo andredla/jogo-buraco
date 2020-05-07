@@ -51,6 +51,19 @@ function Render(){
 		return canvas;
 	}
 
+	this.eye = function(){
+		var player_deck = $(".player_deck");
+		var eye = $(".display_cartas canvas");
+		if(player_deck.css("display") != "none"){
+			//cor = "#83A9A2";
+			eye.css({opacity: 0.3});
+		}else{
+			//cor = "#ffffff";
+			eye.css({opacity: 1});
+		}
+		return false;
+	}
+
 	this.preview = function(naipe){
 		var naipe_bg = $("#"+naipe+"_bg").val();
 		var naipe_fg = $("#"+naipe+"_fg").val();
@@ -952,6 +965,15 @@ function deck_compra(){
 function display_cartas(){
 	arr_cartas = [];
 	$(".carta").removeClass("action");
+
+	var player_deck = $(".player_deck");
+	if(player_deck.css("display") == "none"){
+		player_deck.css({display: "block"});
+	}else{
+		player_deck.css({display: "none"});
+	}
+
+	render.eye();
 	//$( ".meio" ).dialog();
 	//$(".player_deck").dialog();
 	return false;
@@ -1187,7 +1209,10 @@ $(function(){
 	$("#player_nome").val( $.cookie("player_nome") );
 	render = new Render();
 	bi.LightboxExibe({lightbox: "load"});
-	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
+	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back", "eye"], function(){
+		var eye = render.tint(render.imgs["eye"], 50, 50, "#ffffff");
+		$(".display_cartas").html(eye);
+		render.eye();
 		bi.LightboxEsconde();
 	});
 });
