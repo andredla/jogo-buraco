@@ -602,6 +602,7 @@ exports.initGame = function(sio, socket){
 
 	gameSocket.on("retomar", retomar);
 	gameSocket.on("connect_refresh", connect_refresh);
+	gameSocket.on("editar_deck_ver", editar_deck_ver);
 	gameSocket.on("editar_deck_aplicar", editar_deck_aplicar);
 	gameSocket.on("sala_cria", sala_cria);
 	gameSocket.on("sala_entra", sala_entra);
@@ -700,6 +701,19 @@ function socket_emit_all(action, data){
 }
 // Fim [socket_emit_all]
 
+// Inicio [editar_deck_ver]
+function editar_deck_ver(data){
+	console.log("-----------------");
+	console.log("editar_deck_ver...");
+	console.log(data);
+	var sala = salas[data.sala];
+	var sockets = io.sockets.sockets;
+	var s = sockets[data.socket];
+	s.emit("editar_deck_ver_ok", {sala: sala});
+	return false;
+}
+// Fim [editar_deck_ver]
+
 // Inicio [editar_deck_aplicar]
 function editar_deck_aplicar(data){
 	console.log("-----------------");
@@ -707,7 +721,6 @@ function editar_deck_aplicar(data){
 	console.log(data);
 	var sala = salas[data.sala];
 	var cores = data.cores;
-	console.log(sala);
 	sala.cores.diams.bg = cores.diams.bg;
 	sala.cores.diams.fg = cores.diams.fg;
 	sala.cores.spades.bg = cores.spades.bg;
