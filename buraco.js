@@ -38,6 +38,7 @@ function Sala(){
 				if(id == this.players[p].id){
 					//console.log( this.players[p] );
 					//return {ind: p, player: this.players.splice(p, 0)};
+					//console.log({ind: p, player: this.players[p]});
 					return {ind: p, player: this.players[p]};
 				}
 			}
@@ -57,6 +58,17 @@ function Sala(){
 				if(player.id == this.players[p].id){
 					this.players.splice(p, 1);
 				}
+			}
+		}
+		return false;
+	}
+
+	this.sock_leave = function(s1){
+		for(var player in this.players){
+			var p = this.players[player];
+			if(p){
+				var s = io.sockets.sockets[p.socket];
+				s.leave(s1);
 			}
 		}
 		return false;
@@ -129,7 +141,8 @@ function Sala(){
 		this.players[0].deck = new Deck();
 		this.players[0].deck = this.deck;
 		//this.deck = null;
-		this.sock_change("lobby", this.id);
+		//this.sock_change("lobby", this.id);
+		this.sock_leave("lobby");
 		return false;
 	}
 
@@ -209,7 +222,8 @@ function Sala(){
 		}
 
 
-		this.sock_change("lobby", this.id);
+		//this.sock_change("lobby", this.id);
+		this.sock_leave("lobby");
 		return false;
 	}
 
@@ -445,8 +459,12 @@ function Deck(){
 
 	this.order_ace = function(){
 		var ace = this.find_carta_val("1", 1);
-		var max = this.body[0].id;
-		var min = this.body[this.body.length-1].id;
+		var max = 13;
+		var min = 2;
+		if(this.body.length > 0){
+			max = this.body[0].id;
+			min = this.body[this.body.length-1].id;
+		}
 		if(ace){
 			if((14 - max) < (min - 1)){
 				this.body.splice(0, 0, ace);
@@ -621,7 +639,7 @@ exports.initGame = function(sio, socket){
 	gameSocket.on("disconnect", disconnect);
 
 	gameSocket.emit("conn_init", { socket_id: socket.id, player_id: uuidv4("xxx-xxx") });
-	gameSocket.join("lobby");
+	//gameSocket.join("lobby");
 }
 // Fim [init]
 
@@ -642,7 +660,7 @@ function uuidv4(mask){
 // Inicio [disconnect]
 function disconnect(data){
 	var rooms = io.sockets.adapter.sids[gameSocket.id];
-	for(var room in rooms) { gameSocket.leave(room); }
+	//for(var room in rooms) { gameSocket.leave(room); }
 	return false;
 }
 // Fim [disconnect]
@@ -656,16 +674,22 @@ function retomar(data){
 		var s = salas[sala];
 		var p = s.findPlayer(data.player);
 		if(p){
+			//console.log(p.player.nome, p.player.socket);
+			p.player.socket = data.socket;
+			p.player.sala = sala;
 			//console.log(data.player, p, s);
+			io.sockets.sockets[p.player.socket].join(s.id);
 			if(s.started){
-				s.sock_change("lobby", s.id);
+				io.sockets.sockets[p.player.socket].leave("lobby");
+				//s.sock_change("lobby", s.id);
 				//io.in(s.id).emit("sala_start_ok", {sala: salas[sala]});
 				io.sockets.sockets[p.player.socket].emit("sala_start_ok", {sala: salas[sala]});
 				return false;
 			}
 		}
 	}
-	gameSocket.join("lobby");
+	//gameSocket.join("lobby");
+	io.sockets.sockets[data.socket].join("lobby");
 	io.in("lobby").emit("sala_entra_ok", {salas: salas});
 	return false;
 }
@@ -677,14 +701,24 @@ function connect_refresh(data){
 	console.log("connect_refresh...");
 	console.log(data);
 	if(data.player_id){
+		io.sockets.sockets[data.socket_id].join("lobby");
 		for(var sala in salas){
 			var s = salas[sala];
 			var p = s.findPlayer(data.player_id);
 			if(p){
-				//console.log(p, s);
 				p.player.socket = data.socket_id;
+				io.sockets.sockets[data.socket_id].join(s.id);
+				if(s.started){
+					//io.sockets.sockets[data.socket_id].leave("lobby");
+					//io.sockets.sockets[data.socket_id].emit("sala_start_ok", {sala: s});
+					setTimeout(function(){ retomar({player: p.player.id, socket: data.socket_id}); }, 900);
+					return false;
+				}
+				//retomar({player: p.player.id, socket: data.socket_id});
+				//io.sockets.sockets[data.socket_id].leave("lobby");
 			}
 		}
+		io.in("lobby").emit("sala_entra_ok", {salas: salas});
 	}
 	return false;
 }
@@ -757,13 +791,22 @@ function sala_entra(data){
 	//console.log(io);
 	//var room = io.sockets.adapter.rooms[data.sala]
 	if(salas.hasOwnProperty(data.sala)){
-		gameSocket.join(data.sala);
+		if(salas[data.sala].started){return false;}
+		//gameSocket.join(data.sala);
 		var p = new Player();
 		p.cria(data.id, data.socket_id, data.nome, data.lugar);
+		var so = io.sockets.sockets[p.socket];
+
 		for(var s in salas){
 			salas[s].removePlayer(p);
+			so.leave(s);
 		}
-		salas[data.sala].addPlayer(p, data.lugar);
+		var s = salas[data.sala];
+		s.addPlayer(p, data.lugar);
+
+		so.join(data.sala);
+		p.sala = data.sala;
+
 		data.salas = salas;
 		io.in("lobby").emit("sala_entra_ok", data);
 	}else{
@@ -779,6 +822,7 @@ function sala_start(data){
 	console.log("sala_start...");
 	console.log(data);
 	var sala = salas[data.sala];
+	if(sala && sala.started){return false;}
 	sala.start();
 	//sala.start_debug();
 
