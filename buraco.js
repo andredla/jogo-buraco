@@ -843,7 +843,9 @@ function deck_compra(data){
 	var p = s.findPlayer(data.player);
 	var c = s.deck.compra();
 	p.player.compra( c );
-	io.in(data.sala).emit("sala_update_ok", {sala: s, carta: [c.uid]});
+	var acao = {audio:{src: "comprar_baralho", out: []}};
+
+	io.in(data.sala).emit("sala_update_ok", {sala: s, carta: [c.uid], acao: acao});
 	return false;
 }
 // Fim [deck_compra]
@@ -876,7 +878,8 @@ function mesa_compra(data){
 	var p = s.findPlayer(data.player);
 	var temp = s.compra_mesa(p);
 
-	io.in(data.sala).emit("sala_update_ok", {sala: s, carta: temp});
+	var acao = {audio:{src: "comprar_mesa", out: []}};
+	io.in(data.sala).emit("sala_update_ok", {sala: s, carta: temp, acao: acao});
 	return false;
 }
 // Fim [mesa_compra]
@@ -923,7 +926,7 @@ function baixar_jogo(data){
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
 
-	var acao = {anima:{tipo: "slideInUp", cartas: anima_cartas}};
+	var acao = {audio:{src: "baixar_jogo", out: []}, anima:{tipo: "slideInUp", cartas: anima_cartas}};
 	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
@@ -954,7 +957,7 @@ function baixar_jogo_add(data){
 	p_dest.player.jogos[data.jogo].order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
-	var acao = {anima:{tipo: "slideInUp", cartas: anima_cartas}};
+	var acao = {audio:{src: "baixar_jogo", out: []}, anima:{tipo: "slideInUp", cartas: anima_cartas}};
 	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
