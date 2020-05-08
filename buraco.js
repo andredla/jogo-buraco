@@ -712,7 +712,7 @@ function connect_refresh(data){
 					//io.sockets.sockets[data.socket_id].leave("lobby");
 					//io.sockets.sockets[data.socket_id].emit("sala_start_ok", {sala: s});
 					//setTimeout(function(){ retomar({player: p.player.id, socket: data.socket_id}); }, 900);
-					return false;
+					//return false;
 				}
 				//retomar({player: p.player.id, socket: data.socket_id});
 				//io.sockets.sockets[data.socket_id].leave("lobby");
