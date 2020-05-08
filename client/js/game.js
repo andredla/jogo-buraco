@@ -183,7 +183,7 @@ function Render(){
 		$(".mesa_deck").dialog({
 			"buttons":{"Comprar": function(){ mesa_compra(); }},
 			close: function( event, ui ) { arr_cartas = []; }
-		});
+		}).closest(".ui-dialog").draggable({containment: ""});
 		return false;
 	}
 
@@ -745,7 +745,7 @@ function editar_deck(sala){
 		"buttons":[
 		{text: "Aplicar", class: "btn", click: function(){ editar_deck_aplicar(sala); }}
 		]
-	});
+	}).closest(".ui-dialog").draggable({containment: ""});
 	return false;
 }
 // Fim [editar_deck]
@@ -793,6 +793,7 @@ function conn_init(data){
 	}else{
 		player_id = pid;
 	}
+
 	console.log(socket_id, player_id);
 	socket.emit("connect_refresh", {socket_id: socket_id, player_id: player_id});
 	return false;
@@ -809,7 +810,7 @@ function console_log(data){
 // Inicio [retomar]
 function retomar(){
 	var player_id = $.cookie("player_id");
-	socket.emit("retomar", {player: player_id});
+	socket.emit("retomar", {player: player_id, socket: socket_id});
 	return false;
 }
 // Fim [retomar]
@@ -886,6 +887,7 @@ function sala_entra(lugar, sala){
 // Inicio [sala_entra_ok]
 function sala_entra_ok(data){
 	render.salas(data);
+	//bi.LightboxEsconde();
 	return false;
 }
 // Fim [sala_entra_ok]
@@ -908,6 +910,7 @@ function sala_start_ok(data){
 	$(".player_deck").html("");
 	$(".lobby").hide();
 	$(".jogo").show();
+	//bi.LightboxEsconde();
 
 	sala_update_ok( cb_data );
 	//render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back"], function(){
@@ -948,7 +951,7 @@ function terminar_ok(data){
 	$(".player_jogo").dialog("destroy");
 	$(".jogo").hide();
 	$(".lobby").show();
-	socket.emit("retomar", {player: player_id});
+	socket.emit("retomar", {player: player_id, socket: socket_id});
 }
 // Fim [terminar_ok]
 
@@ -1078,7 +1081,7 @@ function jogo_baixado(ind, pid){
 					socket.emit("deck_serial", {player: pid, sala: sala_id, jogo: ind, serial: serial(".player_jogo_deck .carta")});
 				}
 			}
-		});
+		}).closest(".ui-dialog").draggable({containment: ""});
 	}else{
 		jogo_baixado_adicionar(ind);
 	}
@@ -1213,6 +1216,6 @@ $(function(){
 		var eye = render.tint(render.imgs["eye"], 50, 50, "#ffffff");
 		$(".display_cartas").html(eye);
 		render.eye();
-		bi.LightboxEsconde();
+		setTimeout(function(){ bi.LightboxEsconde(); }, 1000);
 	});
 });
