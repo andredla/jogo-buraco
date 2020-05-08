@@ -23,7 +23,8 @@
 <script language="JavaScript" src="client/js/jquery.drawrpalette-min.js" type="text/javascript"></script>
 <script language="JavaScript" src="client/js/biblioteca.js" type="text/javascript"></script>
 <script type="text/javascript">
-	var socket = io();
+	//var socket = io();
+	var socket = io({transports: ["websocket"], upgrade: false});
 </script>
 <script language="JavaScript" src="client/js/game.js" type="text/javascript"></script>
 </head>
