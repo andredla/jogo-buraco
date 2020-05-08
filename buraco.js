@@ -711,7 +711,8 @@ function connect_refresh(data){
 				if(s.started){
 					//io.sockets.sockets[data.socket_id].leave("lobby");
 					//io.sockets.sockets[data.socket_id].emit("sala_start_ok", {sala: s});
-					setTimeout(function(){ retomar({player: p.player.id, socket: data.socket_id}); }, 900);
+					//setTimeout(function(){ retomar({player: p.player.id, socket: data.socket_id}); }, 900);
+					retomar({player: p.player.id, socket: data.socket_id});
 					return false;
 				}
 				//retomar({player: p.player.id, socket: data.socket_id});
