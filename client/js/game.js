@@ -8,6 +8,7 @@ var data_old = null;
 var flag_serial = true;
 var jogo_pos = [];
 var flag_morto = false;
+var flag_resource = false;
 
 $.getJSON("/client/js/cartas.json", function(json){
 	cartas = json;
@@ -902,6 +903,9 @@ function sala_start(sala){
 // Inicio [sala_start_ok]
 function sala_start_ok(data){
 	//console.log(data);
+	if(flag_resource == false){
+		setTimeout(function(){ sala_start_ok(data); }, 500);
+	}
 	sala_id = data.sala.id;
 	var cb_data = data;
 	$(".mesa").html("");
@@ -1213,9 +1217,11 @@ $(function(){
 	render = new Render();
 	bi.LightboxExibe({lightbox: "load"});
 	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back", "eye"], function(){
+		flag_resource = true;
 		var eye = render.tint(render.imgs["eye"], 50, 50, "#ffffff");
 		$(".display_cartas").html(eye);
 		render.eye();
-		setTimeout(function(){ bi.LightboxEsconde(); }, 1000);
+		bi.LightboxEsconde();
+		//setTimeout(function(){ bi.LightboxEsconde(); }, 1000);
 	});
 });
