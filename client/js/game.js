@@ -9,6 +9,7 @@ var flag_serial = true;
 var jogo_pos = [];
 var flag_morto = false;
 var flag_resource = false;
+var flag_audio = false;
 
 $.getJSON("/client/js/cartas.json", function(json){
 	cartas = json;
@@ -85,8 +86,16 @@ function Render(){
 		if(acao && acao.audio){
 			//console.log(acao);
 			var audio = $(".audio_"+acao.audio.src);
-			if($.inArray(player_id, acao.audio.in) >= 0){
-				audio[0].play();
+			if(acao.audio.in){
+				if($.inArray(player_id, acao.audio.in) >= 0){
+					audio[0].play();
+				}
+			}
+			console.log("out");
+			if(acao.audio.out){
+				if($.inArray(player_id, acao.audio.in) < 0){
+					audio[0].play();
+				}
 			}
 		}
 		return false;
@@ -770,6 +779,7 @@ function editar_deck_aplicar(sala){
 
 // Inicio [audio_load]
 function audio_load(audio){
+	flag_audio = true;
 	var audio = $(".audio_"+audio);
 	audio[0].play();
 	audio[0].pause();
@@ -877,6 +887,9 @@ function sala_cria_ok(data){
 function sala_entra(lugar, sala){
 	//console.log(lugar, sala);
 	audio_load("atencao");
+	audio_load("comprar_baralho");
+	audio_load("comprar_mesa");
+	audio_load("baixar_jogo");
 	var nome = $("#player_nome").val();
 	$.cookie("player_nome", nome);
 	data = {id: player_id, socket_id: socket_id, nome: nome, sala: sala, lugar: lugar};
@@ -1006,6 +1019,12 @@ function add_carta(carta){
 
 // Inicio [mesa]
 function mesa(){
+	if(flag_audio == false){
+	audio_load("atencao");
+	audio_load("comprar_baralho");
+	audio_load("comprar_mesa");
+	audio_load("baixar_jogo");
+	}
 	if(arr_cartas.length > 0){
 		socket.emit("player_discarta", {player: player_id, sala: sala_id, carta: arr_cartas.pop()});
 		arr_cartas = [];
