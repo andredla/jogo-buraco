@@ -18,6 +18,8 @@ function Sala(){
 	this.vez_ultima = null;
 	this.lugares = [];
 	this.cores = {diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
+	this.flag_compra = false;
+	this.flag_descarta = false;
 
 	this.cria = function(){
 		// Create a unique Socket.IO Room
@@ -105,6 +107,14 @@ function Sala(){
 		return temp;
 	}
 
+	this.checak_vez = function(player){
+		var ret = false;
+		if(this.vez == player.lugar-1){
+			ret = true;
+		}
+		return ret;
+	}
+
 	this.add_vez = function(){
 		var min = 0;
 		var max = this.lugares.length-1;
@@ -112,6 +122,8 @@ function Sala(){
 		if(this.vez > max){
 			this.vez = min;
 		}
+		this.flag_compra = false;
+		this.flag_descarta = false;
 		return false;
 	}
 
@@ -149,6 +161,9 @@ function Sala(){
 	this.start = function(){
 		this.started = true;
 		this.lugares = [];
+		this.flag_compra = false;
+		this.flag_descarta = false;
+
 		this.mesa = new Deck();
 		var d1 = new Deck();
 		//d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
@@ -626,7 +641,7 @@ exports.initGame = function(sio, socket){
 	gameSocket.on("sala_entra", sala_entra);
 	gameSocket.on("sala_start", sala_start);
 	gameSocket.on("deck_compra", deck_compra);
-	gameSocket.on("player_discarta", player_discarta);
+	gameSocket.on("player_descarta", player_descarta);
 	gameSocket.on("mesa_compra", mesa_compra);
 	gameSocket.on("baixar_jogo", baixar_jogo);
 	gameSocket.on("baixar_jogo_add", baixar_jogo_add);
@@ -841,6 +856,13 @@ function deck_compra(data){
 	console.log(data);
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
+
+	if(!s.checak_vez(p.player) || s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou ou não pode comprar!"}});
+		return false;
+	}
+	s.flag_compra = true;
+
 	var c = s.deck.compra();
 	p.player.compra( c );
 	var acao = {audio:{src: "comprar_baralho", out: []}};
@@ -850,13 +872,20 @@ function deck_compra(data){
 }
 // Fim [deck_compra]
 
-// Inicio [player_discarta]
-function player_discarta(data){
+// Inicio [player_descarta]
+function player_descarta(data){
 	console.log("-----------------");
-	console.log("player_discarta...");
+	console.log("player_descarta...");
 	console.log(data);
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
+
+	if(!s.checak_vez(p.player) || s.flag_descarta || !s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já descartou ou não pode descartar!"}});
+		return false;
+	}
+	s.flag_descarta = true;
+
 	var c = p.player.discarta(data.carta);
 	s.add_mesa(c);
 	s.add_vez();
@@ -867,7 +896,7 @@ function player_discarta(data){
 	io.in(data.sala).emit("sala_update_ok", {sala: s, acao: acao});
 	return false;
 }
-// Fim [player_discarta]
+// Fim [player_descarta]
 
 // Inicio [mesa_compra]
 function mesa_compra(data){
@@ -876,8 +905,14 @@ function mesa_compra(data){
 	console.log(data);
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
-	var temp = s.compra_mesa(p);
 
+	if(!s.checak_vez(p.player) || s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou ou não pode comprar!"}});
+		return false;
+	}
+	s.flag_compra = true;
+
+	var temp = s.compra_mesa(p);
 	var acao = {audio:{src: "comprar_mesa", out: []}};
 	io.in(data.sala).emit("sala_update_ok", {sala: s, carta: temp, acao: acao});
 	return false;
