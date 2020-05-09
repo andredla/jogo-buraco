@@ -18,6 +18,7 @@ $.getJSON("/client/js/cartas.json", function(json){
 // Inicio [socket_recebe]
 socket.on("conn_init", conn_init);
 socket.on("console", console_log);
+socket.on("jogo_alerta", jogo_alerta);
 socket.on("editar_deck_ver_ok", editar_deck_ver_ok);
 socket.on("sala_cria_ok", sala_cria_ok);
 socket.on("sala_entra_ok", sala_entra_ok);
@@ -91,7 +92,6 @@ function Render(){
 					audio[0].play();
 				}
 			}
-			console.log("out");
 			if(acao.audio.out){
 				if($.inArray(player_id, acao.audio.in) < 0){
 					audio[0].play();
@@ -108,7 +108,6 @@ function Render(){
 			for(var carta in acao.anima.cartas){
 				var uid = acao.anima.cartas[carta];
 				$("span[uid='"+uid+"']").each(function(){
-					console.log(this);
 					$(this).addClass("animated "+acao.anima.tipo).bind("animationend", function(){
 						$(this).removeClass("animated "+acao.anima.tipo);
 					});
@@ -211,6 +210,7 @@ function Render(){
 	this.players = function(data){
 		//console.log(data);
 		//var div = $(".players");
+		var p_own = player_find();
 		var div = $(".meio");
 		var btn_adm = $("<span class='btn btn_adm' onclick='menu_adm();'>...</span>");
 		//div.html("");
@@ -231,7 +231,16 @@ function Render(){
 				if(data.sala.lugares[data.sala.vez] == p.lugar){
 					p_html.addClass("destaque");
 					if(p.id != player_id){
-						render.jogos( jogo_decide(p.id).id, ".other_jogos" );
+						if(data.sala.lugares.length >=4){
+							if(p_own.lugar == 1 || p_own.lugar == 3){
+								render.jogos( data.sala.players[1].id, ".other_jogos" );
+							}else{
+								render.jogos( data.sala.players[0].id, ".other_jogos" );
+							}
+						}else{
+							//render.jogos( jogo_decide(p.id).id, ".other_jogos" );
+							render.jogos( p.id, ".other_jogos" );
+						}
 					}
 				}
 				p_html.append(p_cartas);
@@ -562,141 +571,32 @@ function Render(){
 }
 // Fim [render]
 
-// Inicio [ColorPicker]
-function ColorPicker(){
-	this.label = $("<span class='color_picker_label'></span>");
-	this.obj = $("<span class='color_picker_obj'></span>");
-	this.block = $("<canvas class='color_block' width='100' height='100'></canvas>");
-	this.strip = $("<canvas class='color_strip' width='30' height='100'></canvas>");
-	this.ctx_b = this.block[0].getContext("2d");
-	this.ctx_s = this.strip[0].getContext("2d");
-	this.drag = false;
-
-	this.init = function(cb){
-	 var block_wh = {w: parseInt(this.block.css("width")), h: parseInt(this.block.css("height"))};
-	 var strip_wh = {w: parseInt(this.strip.css("width")), h: parseInt(this.strip.css("height"))};
-
-		var rgbaColor = "rgba(255,0,0,1)";
-		this.ctx_b.rect(0, 0, block_wh.w, block_wh.h);
-		this.fillGradient(this.ctx_b, this.ctx_s, rgbaColor);
-
-		this.ctx_s.rect(0, 0, strip_wh.w, strip_wh.h);
-		var grd1 = this.ctx_s.createLinearGradient(0, 0, 0, strip_wh.h);
-		grd1.addColorStop(0, 'rgba(255, 0, 0, 1)');
-		grd1.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
-		grd1.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
-		grd1.addColorStop(0.51, 'rgba(0, 255, 255, 1)');
-		grd1.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
-		grd1.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
-		grd1.addColorStop(1, 'rgba(255, 0, 0, 1)');
-		this.ctx_s.fillStyle = grd1;
-		this.ctx_s.fill();
-
-		drag = this.drag;
-		label = this.label;
-		ctx_b = this.ctx_b;
-		ctx_s = this.ctx_s;
-		changeColor = this.changeColor;
-		change_block = this.change_block;
-		fillGradient = this.fillGradient;
-
-		this.block.bind("mousedown touchstart", function(ev){
-			ev.preventDefault();
-			drag = true;
-			changeColor(ev, ctx_b, cb);
-		});
-
-		this.block.bind("mousemove touchmove", function(ev){
-			ev.preventDefault();
-			if(drag){
-				changeColor(ev, ctx_b, cb);
-			}
-		});
-
-		this.block.bind("mouseup touchend", function(ev){
-			ev.preventDefault();
-			drag = false;
-		});
-
-		this.strip.bind("mousedown touchstart", function(ev){
-			ev.preventDefault();
-			drag = true;
-			change_block(ev, ctx_b, ctx_s);
-		});
-
-		this.strip.bind("mousemove touchmove", function(ev){
-			ev.preventDefault();
-			if(drag){
-				change_block(ev, ctx_b, ctx_s);
-			}
-		});
-
-		this.strip.bind("mouseup touchend", function(ev){
-			ev.preventDefault();
-			drag = false;
-		});
-
-		var div = $("<div></div>");
-		div.append(this.label);
-		this.obj.append(this.block);
-		this.obj.append(this.strip);
-		div.append(this.obj);
-
-		return div;
-	}
-
-	this.fillGradient = function(ctx1, ctx2, rgba){
-		//console.log("fillGradient", ctx1, ctx2, rgba);
-		ctx1.fillStyle = rgba;
-		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
-
-		var grdWhite = ctx2.createLinearGradient(0, 0, ctx1.canvas.clientWidth, 0);
-		grdWhite.addColorStop(0, 'rgba(255,255,255,1)');
-		grdWhite.addColorStop(1, 'rgba(255,255,255,0)');
-		ctx1.fillStyle = grdWhite;
-		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
-
-		var grdBlack = ctx2.createLinearGradient(0, 0, 0, ctx1.canvas.clientHeight);
-		grdBlack.addColorStop(0, 'rgba(0,0,0,0)');
-		grdBlack.addColorStop(1, 'rgba(0,0,0,1)');
-		ctx1.fillStyle = grdBlack;
-		ctx1.fillRect(0, 0, ctx1.canvas.clientWidth, ctx1.canvas.clientHeight);
-		//return false;
-	}
-
-	this.changeColor = function(e, ctx1, cb){
-		if(e != undefined){
-	  ex = e.pageX || e.originalEvent.touches[0].pageX;
-	  ey = e.pageY || e.originalEvent.touches[0].pageY;
-	  var b = ctx1.canvas.getBoundingClientRect();
-	  x = Math.floor(ex - b.left);
-	  y = Math.floor(ey - b.top);
-	  var imageData = ctx1.getImageData(x, y, 1, 1).data;
-	  rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
-	  label.css({"background-color": rgbaColor});
-	  //$("#cor").val(rgbaColor);
-	  //ret = rgbaColor;
-	  cb(rgbaColor);
-		}
-		return false;
-	}
-
-	this.change_block = function(e, ctx1, ctx2){
-		if(e != undefined){
-			ex = e.pageX || e.originalEvent.touches[0].pageX;
-			ey = e.pageY || e.originalEvent.touches[0].pageY;
-	  var b = ctx2.canvas.getBoundingClientRect();
-	  x = Math.floor(ex - b.left);
-	  y = Math.floor(ey - b.top);
-			var imageData = ctx2.getImageData(x, y, 1, 1).data;
-			rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
-			fillGradient(ctx1, ctx2, rgbaColor);
-		}
-		return false;
+// Inicio [jogo_alerta]
+function jogo_alerta(data){
+	data_old = data;
+	var alerta = $("#alerta");
+	if(data.alerta){
+		console.log("jogo_alerta");
+		alerta.html(data.alerta.txt);
+		bi.LightboxExibe({lightbox: "alerta"});
+		setTimeout(function(){ bi.LightboxEsconde({lightbox: "alerta"}); }, 2000);
 	}
 	return false;
 }
-// Fim [ColorPicker]
+// Fim [jogo_alerta]
+
+// Inicio [player_find]
+function player_find(){
+	var ret = null;
+	for(var player in data_old.sala.players){
+		var p = data_old.sala.players[player];
+		if(p && p.id == player_id){
+			ret = p;
+		}
+	}
+	return ret;
+}
+// Fim [player_find]
 
 // Inicio [editar_deck]
 function editar_deck(sala){
@@ -1026,7 +926,7 @@ function mesa(){
 	audio_load("baixar_jogo");
 	}
 	if(arr_cartas.length > 0){
-		socket.emit("player_discarta", {player: player_id, sala: sala_id, carta: arr_cartas.pop()});
+		socket.emit("player_descarta", {player: player_id, sala: sala_id, carta: arr_cartas.pop()});
 		arr_cartas = [];
 	}else{
 		render.mesa_deck( data_old );
