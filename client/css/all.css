@@ -71,6 +71,8 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .editar_deck_janela .grupo_controle input {display: block;}
 .editar_deck_janela .grupo_preview {position: relative; display: inline-block;}
 
+.lightbox {position: absolute; display: inline-block; padding: 1em; font-size: 20px; font-weight: bold; color: #444; background-color: #ffffff; border: 1px solid #ccc;}
+
 .menu_adm {position: absolute; display: inline-block;}
 .menu_adm_opt > .ui-dialog-titlebar { display: none;}
 .menu_adm_opt > .ui-dialog-content {padding: 0;}
