@@ -33,7 +33,7 @@ function Render(){
 	this.bounds = {w: 70, h: 110, na: 0, ns: 0};
 	this.grid = {w: 5, h: 6};
 	this.delta = {w: this.bounds.w/this.grid.w, h: this.bounds.h/this.grid.h};
-	this.bounds.na = this.bounds.w/2;
+	this.bounds.na = this.bounds.w/2.5;
 	this.bounds.ns = this.bounds.w/5;
 
 	this.pixel_ratio = function(){
@@ -189,7 +189,7 @@ function Render(){
 			c_html.removeAttr("onclick");
 			mesa_deck.append( c_html );
 		}
-		$(".mesa_deck").dialog({
+		$(".mesa_deck").dialog({ maxHeight: 500, width: 600,
 			"buttons":{"Comprar": function(){ mesa_compra(); }},
 			close: function( event, ui ) { arr_cartas = []; }
 		}).closest(".ui-dialog").draggable({containment: ""});
@@ -389,7 +389,7 @@ function Render(){
 	}
 
 	this.naipe = function(g, p, ctx, img){
-		var off = {x:10, y:30};
+		var off = {x:0, y:60};
 		var delta = {w: (this.bounds.w-off.x)/g.w, h: (this.bounds.h-off.y)/g.h};
 		//this.draw_grid(g, ctx);
 
@@ -450,117 +450,153 @@ function Render(){
 
 		var naipe = this.tint(this.imgs[c.naipe], this.bounds.na, this.bounds.na, c.fgcolor);
 		if(c.id == 1){
-			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
 			//$("body").append( naipe );
 		}
 
 		if(c.id == 2){
-			this.naipe({w:4, h:5}, {x:1.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 3){
-			this.naipe({w:4, h:5}, {x:1.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 4){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 5){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 6){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 7){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 8){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:3, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:3, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 9){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 10){
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:1.5, y:3, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:1, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:1.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:2.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:1.5, y:3, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 11){
 			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.h, c.fgcolor);
 			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.h}, ctx, fig);
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 12){
 			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.h, c.fgcolor);
 			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.h}, ctx, fig);
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		if(c.id == 13){
 			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.h, c.fgcolor);
 			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.h}, ctx, fig);
-			this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
-			this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			this.naipe({w:4, h:5}, {x:2.85, y:4.85, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:0.5, y:0.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
+			//this.naipe({w:4, h:5}, {x:2.5, y:3.5, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 		}
 
 		var borda = tinycolor(c.bgcolor).darken(20).toString();
 		carta.css({"border-color": borda});
 
 		var ind = $("<span class='ind'>"+cartas[c.id+""].label+"</span>");
-		ind.css({color: c.fgcolor, "font-size": this.bounds.w/4.2 + "px"});
+		ind.css({color: c.fgcolor, "font-size": this.bounds.w/3.5 + "px"});
 		carta.append(ind);
 
 		carta.prepend( canvas );
@@ -579,7 +615,7 @@ function jogo_alerta(data){
 		console.log("jogo_alerta");
 		alerta.html(data.alerta.txt);
 		bi.LightboxExibe({lightbox: "alerta"});
-		setTimeout(function(){ bi.LightboxEsconde({lightbox: "alerta"}); }, 2000);
+		setTimeout(function(){ bi.LightboxEsconde({lightbox: "alerta"}); }, 1500);
 	}
 	return false;
 }
@@ -928,6 +964,7 @@ function mesa(){
 	if(arr_cartas.length > 0){
 		socket.emit("player_descarta", {player: player_id, sala: sala_id, carta: arr_cartas.pop()});
 		arr_cartas = [];
+		$(".player_deck .carta").removeClass("action");
 	}else{
 		render.mesa_deck( data_old );
 	}
