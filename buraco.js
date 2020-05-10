@@ -107,6 +107,60 @@ function Sala(){
 		return temp;
 	}
 
+	this.calculo_final = function(){
+		console.log("-----------------");
+		console.log( "calculo_final..." );
+		if(this.lugares.length >= 4){
+			var p1 = this.players[0];
+			var p2 = this.players[1];
+			var p3 = this.players[2];
+			var p4 = this.players[3];
+
+			p1.calcula();
+			p2.calcula();
+
+			if(p1.deck.body.length <=0 || p3.deck.body.length <=0){
+				p1.score_temp += 100;
+			}
+
+			if(p2.deck.body.length <=0 || p4.deck.body.length <=0){
+				p2.score_temp += 100;
+			}
+
+			if(!p1.morto && !p3.morto){
+				p1.score_temp -= 100;
+			}
+			if(!p2.morto && !p4.morto){
+				p2.score_temp -= 100;
+			}
+
+			p1.score_temp -= p1.deck.soma_jogo();
+			p1.score_temp -= p3.deck.soma_jogo();
+
+			p2.score_temp -= p2.deck.soma_jogo();
+			p2.score_temp -= p4.deck.soma_jogo();
+
+			p1.score = p1.score_temp;
+			p2.score = p2.score_temp;
+		}else{
+			for(var player in this.players){
+				var p = this.players[player];
+				if(p){
+					p.calcula();
+					if(p.deck.body.length <=0){
+						p.score_temp += 100;
+					}
+					if(!p.morto){
+						p.score_temp -= 100;
+					}
+					p.score_temp -= p.deck.soma_jogo();
+					p.score = p.score_temp;
+				}
+			}
+		}
+		return false;
+	}
+
 	this.checa_vez = function(player){
 		var ret = false;
 		if(this.vez == player.lugar-1){
@@ -285,6 +339,9 @@ function Player(){
 		this.calcula();
 		if(!this.morto){
 			this.score_temp -= 100;
+		}
+		if(this.deck.body.length <=0){
+			this.score.temp += 100;
 		}
 		this.score_temp -= this.deck.soma_jogo();
 		this.score = this.score_temp;
@@ -1094,10 +1151,11 @@ function proxima(data){
 	console.log("proxima...");
 	console.log(data);
 	var s = salas[data.sala];
+	s.calculo_final();
 	for(var player in s.players){
 		var p = s.players[player];
 		if(p){
-			p.calculo_final();
+			//p.calculo_final();
 			p.morto = false;
 		}
 	}
