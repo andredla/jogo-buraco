@@ -1036,8 +1036,8 @@ function baixar_jogo_rem(data){
 	}
 	//p.player.deck.order();
 	p_dest.player.deck.order();
-	p_dest.player.deck.order_coringa();
-	p_dest.player.deck.order_ace();
+	//p_dest.player.deck.order_coringa();
+	//p_dest.player.deck.order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
 	io.in(data.sala).emit("sala_update_ok", {sala: s});
