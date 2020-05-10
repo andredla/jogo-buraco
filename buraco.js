@@ -940,6 +940,7 @@ function player_descarta(data){
 	console.log("player_descarta...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 
 	if(!s.checa_vez(p.player)){
