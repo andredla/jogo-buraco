@@ -107,7 +107,7 @@ function Sala(){
 		return temp;
 	}
 
-	this.checak_vez = function(player){
+	this.checa_vez = function(player){
 		var ret = false;
 		if(this.vez == player.lugar-1){
 			ret = true;
@@ -857,8 +857,13 @@ function deck_compra(data){
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
 
-	if(!s.checak_vez(p.player) || s.flag_compra){
-		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou ou não pode comprar!"}});
+	if(!s.checa_vez(p.player)){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Espere a sua vez!"}});
+		return false;
+	}
+
+	if(s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou!"}});
 		return false;
 	}
 	s.flag_compra = true;
@@ -880,8 +885,18 @@ function player_descarta(data){
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
 
-	if(!s.checak_vez(p.player) || s.flag_descarta || !s.flag_compra){
-		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já descartou ou não pode descartar!"}});
+	if(!s.checa_vez(p.player)){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Espere a sua vez!"}});
+		return false;
+	}
+
+	if(!s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você precisa comprar primeiro!"}});
+		return false;
+	}
+
+	if(s.flag_descarta){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já descartou!"}});
 		return false;
 	}
 	s.flag_descarta = true;
@@ -906,8 +921,13 @@ function mesa_compra(data){
 	var s = salas[data.sala];
 	var p = s.findPlayer(data.player);
 
-	if(!s.checak_vez(p.player) || s.flag_compra){
-		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou ou não pode comprar!"}});
+	if(!s.checa_vez(p.player)){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Espere a sua vez!"}});
+		return false;
+	}
+
+	if(s.flag_compra){
+		io.sockets.sockets[p.player.socket].emit("jogo_alerta", {sala: s, alerta: {txt: "Você já comprou!"}});
 		return false;
 	}
 	s.flag_compra = true;
