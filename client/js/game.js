@@ -25,6 +25,7 @@ socket.on("sala_entra_ok", sala_entra_ok);
 socket.on("sala_start_ok", sala_start_ok);
 socket.on("sala_update_ok", sala_update_ok);
 socket.on("terminar_ok", terminar_ok);
+socket.on("idle_ping", idle_ping);
 // Fim [socket_recebe]
 
 // Inicio [render]
@@ -1166,6 +1167,17 @@ function sala_update_ok(data){
 	return false;
 }
 // Fim [sala_update_ok]
+
+// Inicio [idle_ping]
+function idle_ping(data){
+	//console.log(data.url);
+		$.ajax({ url: data.url, context: "", success: function(resposta, status, xhr){
+			console.log("idle_ping...");
+			//jogo_alerta({alerta: {txt:"idle ping..."}});
+		}});
+	return false;
+}
+// Fim [idle_ping]
 // Fim [funcao]
 
 $(function(){
