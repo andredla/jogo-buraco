@@ -82,8 +82,10 @@ function Sala(){
 			if(p){
 				//console.log(p);
 				var s = io.sockets.sockets[p.socket];
-				s.leave(s1);
-				s.join(s2);
+				if(s){
+					s.leave(s1);
+					s.join(s2);
+				}
 				p.sala = s2;
 			}
 		}
@@ -731,7 +733,7 @@ function uuidv4(mask){
 
 // Inicio [disconnect]
 function disconnect(data){
-	var rooms = io.sockets.adapter.sids[gameSocket.id];
+	//var rooms = io.sockets.adapter.sids[gameSocket.id];
 	//for(var room in rooms) { gameSocket.leave(room); }
 	return false;
 }
@@ -1202,7 +1204,23 @@ function extend(a, b){
 	return a;
 }
 // Fim [extend]
+
+// Inicio [idle_ping]
+function idle_ping(time){
+	setInterval(function(){
+		for(var sala in salas){
+			var s = salas[sala];
+			console.log("idle ping..."+s.id);
+			//io.in(s.id).emit("idle_ping", {url: "http://192.168.0.21:2000/client/index.html"});
+			io.in(s.id).emit("idle_ping", {url: "http://jogo-buraco.herokuapp.com/client/index.html"});
+		}
+	}, time);
+	return false;
+}
+// Fim [idle_ping]
 // Fim [funcao]
+
+idle_ping(1000*60*20);
 
 /*
 io.sockets.clients(someRoom).forEach(function(s){
