@@ -1220,7 +1220,7 @@ function idle_ping(time){
 // Fim [idle_ping]
 // Fim [funcao]
 
-idle_ping(1000*60*0.5);
+idle_ping(1000*60*20);
 
 /*
 io.sockets.clients(someRoom).forEach(function(s){
