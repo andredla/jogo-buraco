@@ -540,7 +540,7 @@ function Deck(){
 			min = this.body[this.body.length-1].id;
 		}
 		if(ace){
-			if((14 - max) < (min - 1)){
+			if((14 - max) <= (min - 1)){
 				this.body.splice(0, 0, ace);
 			}else{
 				this.body.push(ace);
