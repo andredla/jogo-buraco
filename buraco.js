@@ -171,6 +171,30 @@ function Sala(){
 		return ret;
 	}
 
+	this.vazia = function(){
+		var ret = true;
+		for(var player in this.players){
+			var p = this.players[player];
+			if(p){
+				ret = false;
+			}
+		}
+		return ret;
+	}
+
+	this.players_fix = function(){
+		var temp = [];
+		for(var player in this.players){
+			var p = this.players[player];
+			if(p){
+				temp.push(p);
+				temp[temp.length-1].lugar = temp.length;
+			}
+		}
+		this.players = temp;
+		return false;
+	}
+
 	this.add_vez = function(){
 		var min = 0;
 		var max = this.lugares.length-1;
@@ -253,6 +277,8 @@ function Sala(){
 		this.morto = [];
 		this.morto.push(m2);
 		this.morto.push(m1);
+
+		this.players_fix();
 
 		for(var player in this.players){
 			var p = this.players[player];
@@ -897,7 +923,7 @@ function sala_start(data){
 	console.log("sala_start...");
 	console.log(data);
 	var sala = salas[data.sala];
-	if(sala && sala.started){return false;}
+	if(sala && (sala.started || sala.vazia())){return false;}
 	sala.start();
 	//sala.start_debug();
 
