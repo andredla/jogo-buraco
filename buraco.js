@@ -1212,7 +1212,7 @@ function idle_ping(time){
 			var s = salas[sala];
 			console.log("idle ping..."+s.id);
 			//io.in(s.id).emit("idle_ping", {url: "http://192.168.0.21:2000/client/index.html"});
-			io.in(s.id).emit("idle_ping", {url: "http://jogo-buraco.herokuapp.com/client/index.html"});
+			io.in(s.id).emit("idle_ping", {url: "http://jogo-buraco.herokuapp.com"});
 		}
 	}, time);
 	return false;
@@ -1220,7 +1220,7 @@ function idle_ping(time){
 // Fim [idle_ping]
 // Fim [funcao]
 
-idle_ping(1000*60*20);
+idle_ping(1000*60*0.5);
 
 /*
 io.sockets.clients(someRoom).forEach(function(s){
