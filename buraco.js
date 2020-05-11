@@ -1212,7 +1212,7 @@ function idle_ping(time){
 			var s = salas[sala];
 			console.log("idle ping..."+s.id);
 			//io.in(s.id).emit("idle_ping", {url: "http://192.168.0.21:2000/client/index.html"});
-			io.in(s.id).emit("idle_ping", {url: "http://jogo-buraco.herokuapp.com"});
+			io.in(s.id).emit("idle_ping", {url: "https://jogo-buraco.herokuapp.com"});
 		}
 	}, time);
 	return false;
