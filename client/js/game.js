@@ -232,7 +232,8 @@ function Render(){
 		var div = $(".meio");
 		var btn_adm = $("<span class='btn btn_adm' onclick='menu_adm();'>...</span>");
 		//div.html("");
-		$(".players").html("");
+		//$(".players").html("");
+		$(".players").remove();
 		var players = data.sala.players;
 		var p_out = $("<span class='players'></span>");
 		for(var player in players){
