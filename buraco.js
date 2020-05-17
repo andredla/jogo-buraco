@@ -361,6 +361,7 @@ function Player(){
 		return this.deck.find_carta(uid);
 	}
 
+/*
 	this.calculo_final = function(){
 		console.log("-----------------");
 		console.log( "calculo_final..." );
@@ -369,12 +370,13 @@ function Player(){
 			this.score_temp -= 100;
 		}
 		if(this.deck.body.length <=0){
-			this.score.temp += 100;
+			this.score_temp += 100;
 		}
 		this.score_temp -= this.deck.soma_jogo();
 		this.score = this.score_temp;
 		return false;
 	}
+*/
 
 	this.calcula = function(){
 		console.log("-----------------");
