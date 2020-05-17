@@ -343,9 +343,15 @@ function Sala(){
 			this.vez_ultima = this.vez;
 		}
 
-
 		//this.sock_change("lobby", this.id);
 		this.sock_leave("lobby");
+		//write_file("salas.json", JSON.stringify(salas));
+		//write_file("salas.json", JSON.stringify(salas, function(key, val){
+			//if (typeof val === 'function') {
+			//return val + ''; // implicitly `toString` it
+			//}
+			//return val;
+		//}));
 		return false;
 	}
 
@@ -1237,8 +1243,8 @@ function terminar(data){
 	if(!s){ return false; }
 	s.calculo_final();
 	
-	var historico = s.historico_load();
-	s.historico_grava(historico);
+	//var historico = s.historico_load();
+	//s.historico_grava(historico);
 
 	s.sock_change(s.id, "lobby");
 	delete salas[s.id];
