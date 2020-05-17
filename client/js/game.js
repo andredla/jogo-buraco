@@ -176,7 +176,7 @@ function Render(){
 		div.css({"width": "70"});
 		var deck = data.sala.mesa.body;
 		if(deck && deck.length > 0){
-			if(deck.length <= 4){
+			if(deck.length <= 7){
 				for(var carta in deck){
 					var c = deck[carta];
 					var c_html = this.draw( c );
