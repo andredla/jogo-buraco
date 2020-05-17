@@ -173,11 +173,25 @@ function Render(){
 	this.mesa = function(data){
 		var div = $(".mesa");
 		div.html("");
+		div.css({"width": "70"});
 		var deck = data.sala.mesa.body;
 		if(deck && deck.length > 0){
-			var c = this.draw( deck[deck.length-1] );
-			c.removeAttr("onclick");
-			div.html( c );
+			if(deck.length <= 4){
+				for(var carta in deck){
+					var c = deck[carta];
+					var c_html = this.draw( c );
+					c_html.css({position: "absolute", "left": 70/2*carta+"px"});
+					c_html.removeAttr("onclick");
+					div.css({"width": (70/2*deck.length)+30+"px"});
+					div.append(c_html);
+				}
+			}else{
+				var c = this.draw( deck[deck.length-1] );
+				c.removeAttr("onclick");
+				div.css({"width": "70"});
+				div.html( c );
+				//div.append( "<span class='num'>"+this.lead_zero(deck.length, 2)+"</span>" );
+			}
 			div.append( "<span class='num'>"+this.lead_zero(deck.length, 2)+"</span>" );
 		}
 		return false;
