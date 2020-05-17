@@ -1007,7 +1007,8 @@ function jogo_baixado_adicionar(ind){
 function jogo_baixado_remover(ind){
 	flag_serial = false;
 	if(arr_cartas.length > 0){
-		socket.emit("baixar_jogo_rem", {player: player_id, sala: sala_id, jogo: ind, cartas: arr_cartas, player_dest: jogo_decide(player_id).id});
+		//socket.emit("baixar_jogo_rem", {player: player_id, sala: sala_id, jogo: ind, cartas: arr_cartas, player_dest: jogo_decide(player_id).id});
+		socket.emit("baixar_jogo_rem", {player: jogo_decide(player_id).id, sala: sala_id, jogo: ind, cartas: arr_cartas, player_dest: player_id});
 		arr_cartas = [];
 		$(".player_jogo_deck").dialog("close");
 	}
