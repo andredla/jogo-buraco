@@ -109,6 +109,31 @@ function Sala(){
 		return temp;
 	}
 
+	this.historico_load = function(){
+		console.log("-----------------");
+		console.log("historico_load...");
+		var historico = require("./client/js/historico.json");
+		//console.log(historico);
+		return historico;
+	}
+
+	this.historico_grava = function(historico){
+		console.log("-----------------");
+		console.log("historico_grava...");
+		var dt = new Date();
+		var data = formatadata_mascara(dt, "d/m/a h:n:s");
+		var players = [];
+		for(var player in this.players){
+			var p = this.players[player];
+			players.push({nome: p.nome, score: p.score});
+		}
+		historico.push({data: data, players: players});
+		//console.log(historico);
+		var str = JSON.stringify(historico);
+		write_file("client/js/historico.json", str);
+		return false;
+	}
+
 	this.calculo_final = function(){
 		console.log("-----------------");
 		console.log( "calculo_final..." );
@@ -1210,6 +1235,11 @@ function terminar(data){
 	console.log(data);
 	var s = salas[data.sala];
 	if(!s){ return false; }
+	s.calculo_final();
+	
+	var historico = s.historico_load();
+	s.historico_grava(historico);
+
 	s.sock_change(s.id, "lobby");
 	delete salas[s.id];
 	io.in("lobby").emit("terminar_ok", {salas: salas});
@@ -1241,6 +1271,71 @@ function extend(a, b){
 	return a;
 }
 // Fim [extend]
+
+// Inicio [write_file]
+function write_file(nome, txt, enc){
+	//enc types: "ascii", "utf8", "base64"
+	console.log("-----------------");
+	console.log("write_file...");
+	console.log(nome, txt, enc);
+
+	if(!enc){
+		enc = "utf8";
+	}
+	fs = require("fs");
+	fs.writeFile(nome, txt, enc, function (err) {
+		console.log(txt);
+		if(err){ return console.log(err) };
+	});
+	return false;
+}
+// Fim [write_file]
+
+// Inicio [Left]
+function Left(str, n){
+	if (n <= 0)
+		return "";
+	else if (n > String(str).length)
+		return str;
+	else
+		return String(str).substring(0,n);
+}
+// Fim [Left]
+
+// Inicio [Right]
+function Right(str, n){
+	if (n <= 0)
+		return "";
+	else if (n > String(str).length)
+		return str;
+	else {
+		var iLen = String(str).length;
+		return String(str).substring(iLen, iLen - n);
+	}
+}
+// Fim [Right]
+
+// Inicio [formatadata_mascara]
+function formatadata_mascara(dt, mask){
+	var ret = "";
+	var dia, mes, ano, hora, minuto, segundo;
+	dia = Right("0"+dt.getDate(), 2);
+	mes =  Right("0"+(dt.getMonth()+1), 2);
+	ano =  Right("0000"+dt.getFullYear(), 4);
+	hora =  Right("0"+dt.getHours(), 2);
+	minuto =  Right("0"+dt.getMinutes(), 2);
+	segundo =  Right("0"+dt.getSeconds(), 2);
+
+	ret = mask;
+	ret = ret.replace("d", dia);
+	ret = ret.replace("m", mes);
+	ret = ret.replace("a", ano);
+	ret = ret.replace("h", hora);
+	ret = ret.replace("n", minuto);
+	ret = ret.replace("s", segundo);
+	return ret;
+}
+// Fim [formatadata_mascara]
 
 // Inicio [idle_ping]
 function idle_ping(time){
