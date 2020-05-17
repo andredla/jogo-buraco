@@ -159,6 +159,9 @@ function Render(){
 			var p = data_old.sala.players[player];
 			if(p && p.id == player_id){
 				if(data_old.sala.morto.length > 0 && flag_morto == false && p.deck.body.length <=0){
+					if(morto_fix(p)){
+						return false;
+					}
 					var btn_morto = $("<span class='btn btn_morto' onclick='pegar_morto();'>Pegar morto</span>");
 					$(".player_deck").prepend(btn_morto);
 				}
@@ -228,7 +231,8 @@ function Render(){
 				}else{
 					p_morto = $("<span class='morto'></span>");
 				}
-				p_score = $("<span class='score'>"+jogo_decide(p.id).score_temp+"</span>");
+				//p_score = $("<span class='score'>"+jogo_decide(p.id).score_temp+"</span>");
+				p_score = $("<span class='score'>"+(jogo_decide(p.id).score_temp-jogo_decide(p.id).score)+" / "+jogo_decide(p.id).score_temp+"</span>");
 				if(data.sala.lugares[data.sala.vez] == p.lugar){
 					p_html.addClass("destaque");
 					if(p.id != player_id){
@@ -1108,6 +1112,33 @@ function jogo_decide(pid){
 	return ret;
 }
 // Fim [jogo_decide]
+
+// Inicio [morto_fix]
+function morto_fix(p){
+	var ret = false;
+	var s = data_old.sala;
+	if(s.lugares.length >= 4){
+		var p1 = s.players[0];
+		var p2 = s.players[1];
+		var p3 = s.players[2];
+		var p4 = s.players[3];
+
+		if(p.lugar == 1 || p.lugar == 3){
+			if(p1.morto || p3.morto){
+				ret = true;
+			}
+		}
+
+		if(p.lugar == 2 || p.lugar == 4){
+			if(p2.morto || p4.morto){
+				ret = true;
+			}
+		}
+
+	}
+	return ret;
+}
+// Fim [morto_fix]
 
 // Inicio [pegar_morto]
 function pegar_morto(){
