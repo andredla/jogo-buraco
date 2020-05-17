@@ -1005,6 +1005,7 @@ function mesa_compra(data){
 	console.log("mesa_compra...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 
 	if(!s.checa_vez(p.player)){
@@ -1047,6 +1048,7 @@ function baixar_jogo(data){
 	console.log(data);
 	var anima_cartas = [];
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 	var p_dest = s.findPlayer(data.player_dest);
 	var d1 = new Deck();
@@ -1080,6 +1082,7 @@ function baixar_jogo_add(data){
 	console.log(data);
 	var anima_cartas = [];
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 	var p_dest = s.findPlayer(data.player_dest);
 	for(var carta in data.cartas){
@@ -1110,6 +1113,7 @@ function baixar_jogo_rem(data){
 	console.log("baixar_jogo_rem...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 	var p_dest = s.findPlayer(data.player_dest);
 	for(var carta in data.cartas){
@@ -1138,6 +1142,7 @@ function deck_serial(data){
 	console.log(data);
 	//console.log(data.serial);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 	var d1 = new Deck();
 	for(var serial in data.serial){
@@ -1160,6 +1165,7 @@ function pegar_morto(data){
 	console.log("pegar_morto...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	var p = s.findPlayer(data.player);
 	if(s.morto.length > 0 && p.player.deck.body.length <= 0){
 		var m = s.morto.pop();
@@ -1180,6 +1186,7 @@ function proxima(data){
 	console.log("proxima...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	s.calculo_final();
 	for(var player in s.players){
 		var p = s.players[player];
@@ -1200,6 +1207,7 @@ function terminar(data){
 	console.log("terminar...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	s.sock_change(s.id, "lobby");
 	delete salas[s.id];
 	io.in("lobby").emit("terminar_ok", {salas: salas});
@@ -1213,6 +1221,7 @@ function morto_mesa(data){
 	console.log("morto_mesa...");
 	console.log(data);
 	var s = salas[data.sala];
+	if(!s){ return false; }
 	if(s.morto.length > 0){
 		s.deck = new Deck();
 		s.deck = s.morto.pop();
