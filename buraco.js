@@ -17,7 +17,7 @@ function Sala(){
 	this.vez = null;
 	this.vez_ultima = null;
 	this.lugares = [];
-	this.cores = {diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
+	this.cores = {feltro: "#1FAB90", diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
 	this.flag_compra = false;
 	this.flag_descarta = false;
 
@@ -148,27 +148,35 @@ function Sala(){
 
 			if(p1.deck.body.length <=0 || p3.deck.body.length <=0){
 				p1.score_temp += 100;
+				p1.resumo.batida += 100;
 			}
 
 			if(p2.deck.body.length <=0 || p4.deck.body.length <=0){
 				p2.score_temp += 100;
+				p2.resumo.batida += 100;
 			}
 
 			if(!p1.morto && !p3.morto){
 				p1.score_temp -= 100;
+				p1.resumo.morto -= 100;
 			}
 			if(!p2.morto && !p4.morto){
 				p2.score_temp -= 100;
+				p2.resumo.morto -= 100;
 			}
 
 			p1.score_temp -= p1.deck.soma_jogo();
 			p1.score_temp -= p3.deck.soma_jogo();
+			p1.resumo.mao -= p1.deck.soma_jogo();
+			p1.resumo.mao -= p3.deck.soma_jogo();
 
 			p2.score_temp -= p2.deck.soma_jogo();
 			p2.score_temp -= p4.deck.soma_jogo();
+			p2.resumo.mao -= p2.deck.soma_jogo();
+			p2.resumo.mao -= p4.deck.soma_jogo();
 
-			p1.score = p1.score_temp;
-			p2.score = p2.score_temp;
+			//p1.score = p1.score_temp;
+			//p2.score = p2.score_temp;
 		}else{
 			for(var player in this.players){
 				var p = this.players[player];
@@ -176,12 +184,15 @@ function Sala(){
 					p.calcula();
 					if(p.deck.body.length <=0){
 						p.score_temp += 100;
+						p.resumo.batida += 100;
 					}
 					if(!p.morto){
 						p.score_temp -= 100;
+						p.resumo.morto -= 100;
 					}
 					p.score_temp -= p.deck.soma_jogo();
-					p.score = p.score_temp;
+					p.resumo.mao -= p.deck.soma_jogo();
+					//p.score = p.score_temp;
 				}
 			}
 		}
@@ -373,6 +384,7 @@ function Player(){
 	this.morto = false;
 	this.score = 0;
 	this.score_temp = 0;
+	this.resumo = {real: 0, suja: 0, mesa: 0, batida: 0, mao: 0, morto: 0};
 
 	this.cria = function(id, socket_id, nome, lugar){
 		this.id = id;
@@ -414,6 +426,7 @@ function Player(){
 		console.log( "calcula..." );
 		this.score_temp = this.score;
 		this.jogos_label = [];
+		this.resumo = {real: 0, suja: 0, mesa: 0, batida: 0, mao: 0, morto: 0};
 		for(var jogo in this.jogos){
 			var j = this.jogos[jogo];
 			var canastra = j.canastra();
@@ -421,12 +434,15 @@ function Player(){
 			if(canastra == 1){
 				this.score_temp += 200;
 				tipo = "real";
+				this.resumo.real += 200;
 			}
 			if(canastra == 2){
 				this.score_temp += 100;
 				tipo = "suja";
+				this.resumo.suja += 100;
 			}
 			this.score_temp += j.soma_jogo();
+			this.resumo.mesa += j.soma_jogo();
 			this.jogos_label.push(tipo);
 			//console.log( this.score_temp );
 		}
@@ -766,6 +782,7 @@ exports.initGame = function(sio, socket){
 	gameSocket.on("baixar_jogo_rem", baixar_jogo_rem);
 	gameSocket.on("deck_serial", deck_serial);
 	gameSocket.on("pegar_morto", pegar_morto);
+	gameSocket.on("resumo", resumo);
 	gameSocket.on("proxima", proxima);
 	gameSocket.on("terminar", terminar);
 	gameSocket.on("morto_mesa", morto_mesa);
@@ -889,6 +906,7 @@ function editar_deck_aplicar(data){
 	console.log(data);
 	var sala = salas[data.sala];
 	var cores = data.cores;
+	sala.cores.feltro = cores.feltro;
 	sala.cores.diams.bg = cores.diams.bg;
 	sala.cores.diams.fg = cores.diams.fg;
 	sala.cores.spades.bg = cores.spades.bg;
@@ -1213,6 +1231,19 @@ function pegar_morto(data){
 }
 // Fim [pegar_morto]
 
+// Inicio [resumo]
+function resumo(data){
+	console.log("-----------------");
+	console.log("resumo...");
+	console.log(data);
+	var s = salas[data.sala];
+	if(!s){ return false; }
+	s.calculo_final();
+	io.in(data.sala).emit("resumo_ok", {sala: s, player: data.player});
+	return false;
+}
+// Fim [resumo]
+
 // Inicio [proxima]
 function proxima(data){
 	console.log("-----------------");
@@ -1220,16 +1251,16 @@ function proxima(data){
 	console.log(data);
 	var s = salas[data.sala];
 	if(!s){ return false; }
-	s.calculo_final();
+	//s.calculo_final();
 	for(var player in s.players){
 		var p = s.players[player];
 		if(p){
-			//p.calculo_final();
 			p.morto = false;
+			p.score = p.score_temp;
 		}
 	}
 	s.start();
-	io.in(data.sala).emit("sala_update_ok", {sala: s});
+	io.in(data.sala).emit("proxima_ok", {sala: s});
 	return false;
 }
 // Fim [proxima]
