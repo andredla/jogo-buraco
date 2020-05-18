@@ -38,6 +38,7 @@
 		<br/>
 		<input type="text" id="player_nome" name="nome" value="">
 
+		<input type="hidden" id="feltro" value="#1FAB90">
 		<input type="hidden" id="diams_bg" value="#ffffff">
 		<input type="hidden" id="diams_fg" value="#ff0000">
 		<input type="hidden" id="spades_bg" value="#ffffff">
@@ -53,6 +54,9 @@
 
 	<!-- Inicio [editar_deck_janela] -->
 	<div class="editar_deck_janela" title="Editar baralho" style="display: none;">
+		<br/>
+		<div class="out_feltro"><input type="text" class="feltro" value="#1FAB90" /> Cor da Mesa</div>
+		<br/>
 		<span class="grupo diams">
 			<span class="grupo_controle">
 				<input type="text" class="ctl_bg" value="#ffffff" />
@@ -93,7 +97,7 @@
 	<!-- Inicio [menu_adm] -->
 	<div class="menu_adm" style="display: none;">
 		<a class="btn btn_morto_mesa" href="#" onclick="return morto_mesa();">Morto para mesa</a>
-		<a class="btn btn_continuar" href="#" onclick="return proxima();">Próxima partida</a>
+		<a class="btn btn_continuar" href="#" onclick="return resumo();">Próxima partida</a>
 		<a class="btn btn_terminar" href="#" onclick="return terminar();">Terminar</a>
 	</div>
 	<!-- Fim [menu_adm] -->
@@ -107,9 +111,13 @@
 	</div>
 	<!-- Fim [audios] -->
 
-	<!-- Inicio [lightbox] -->
+	<!-- Inicio [alerta] -->
 	<div id="alerta" class="lightbox" style="display: none;"></div>
-	<!-- Fim [lightbox] -->
+	<!-- Fim [alerta] -->
+
+	<!-- Inicio [resumo] -->
+	<div id="resumo" class="lightbox" style="display: none;"></div>
+	<!-- Fim [resumo] -->
 
  <!-- Inicio [jogo] -->
 	<div class="jogo" style="display: none;">
