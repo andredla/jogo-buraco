@@ -24,6 +24,8 @@ socket.on("sala_cria_ok", sala_cria_ok);
 socket.on("sala_entra_ok", sala_entra_ok);
 socket.on("sala_start_ok", sala_start_ok);
 socket.on("sala_update_ok", sala_update_ok);
+socket.on("resumo_ok", resumo_ok);
+socket.on("proxima_ok", proxima_ok);
 socket.on("terminar_ok", terminar_ok);
 socket.on("idle_ping", idle_ping);
 // Fim [socket_recebe]
@@ -114,6 +116,111 @@ function Render(){
 					});
 				});
 			}
+		}
+		return false;
+	}
+
+	this.feltro = function(){
+		var feltro = data_old.sala.cores.feltro;
+		//console.log( document.styleSheets[2].cssRules );
+		var css = document.styleSheets[2].cssRules;
+		for(var style in css){
+			var s = css[style];
+			//console.log(css[style]);
+			if(s.selectorText == ".meio" || s.selectorText == ".players::before"){
+				s.style.background = feltro;
+			}
+			if(s.selectorText == ".other_jogos" || s.selectorText == ".player_jogos"){
+				s.style.background = feltro;
+				s.style.borderColor = tinycolor(feltro).darken(10).toString();
+			}
+			if(s.selectorText == ".player_deck" || s.selectorText == ".jogo"){
+				s.style.background = tinycolor(feltro).darken(10).toString();
+			}
+		}
+		return false;
+	}
+
+	this.limpa = function(){
+		$(".other_jogos").html("");
+		bi.LightboxLimpa();
+		return false;
+	}
+
+	this.resumo_color = function(score){
+		var ret = "";
+		if(score > 0){ ret = "pos"; }
+		if(score < 0){ ret = "neg"; }
+		return ret;
+	}
+
+	this.resumo = function(data){
+		var resumo = $("#resumo");
+		var tabela = $("<table class='resumo' border='0' cellpadding='0' cellspacing='0'></table>");
+		var tr_head = $("<tr class='resumo_head'><td>Jogadores</td></tr>");
+		var tr_body_atual = $("<tr class='resumo_body'><td>Pontos Atuais</td></tr>");
+		var tr_body_real = $("<tr class='resumo_body'><td>Canastra real</td></tr>");
+		var tr_body_suja = $("<tr class='resumo_body'><td>Canastra suja</td></tr>");
+		var tr_body_mesa = $("<tr class='resumo_body'><td>Pontos mesa</td></tr>");
+		var tr_body_batida = $("<tr class='resumo_body'><td>Batida</td></tr>");
+		var tr_body_morto = $("<tr class='resumo_body'><td>Morto</td></tr>");
+		var tr_body_mao = $("<tr class='resumo_body'><td>Pontos mão</td></tr>");
+		var tr_body_total = $("<tr class='resumo_body'><td>Total</td></tr>");
+
+		for(var player in data_old.sala.players){
+			var p = data_old.sala.players[player];
+			var td = $("<td>"+p.nome+"</td>");
+			tr_head.append(td);
+			
+			var td = $("<td class='"+this.resumo_color(p.score)+"'>"+p.score+"</td>");
+			tr_body_atual.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.real)+"'>"+p.resumo.real+"</td>");
+			tr_body_real.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.suja)+"'>"+p.resumo.suja+"</td>");
+			tr_body_suja.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.mesa)+"'>"+p.resumo.mesa+"</td>");
+			tr_body_mesa.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.batida)+"'>"+p.resumo.batida+"</td>");
+			tr_body_batida.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.morto)+"'>"+p.resumo.morto+"</td>");
+			tr_body_morto.append(td);
+
+			var td = $("<td class='"+this.resumo_color(p.resumo.mao)+"'>"+p.resumo.mao+"</td>");
+			tr_body_mao.append(td);
+
+			var total = p.score + p.resumo.real + p.resumo.suja + p.resumo.mesa + p.resumo.batida + p.resumo.morto + p.resumo.mao;
+			var td = $("<td class='"+this.resumo_color(total)+"'>"+total+"</td>");
+			tr_body_total.append(td);
+		}
+
+		tabela.append(tr_head);
+		tabela.append(tr_body_atual);
+		tabela.append(tr_body_real);
+		tabela.append(tr_body_suja);
+		tabela.append(tr_body_mesa);
+		tabela.append(tr_body_batida);
+		tabela.append(tr_body_morto);
+		tabela.append(tr_body_mao);
+		tabela.append(tr_body_total);
+
+		if(data_old.sala.lugares.length >= 4){
+			tabela.find("tr").each(function(){
+				$(this).find("td:last").remove();
+				$(this).find("td:last").remove();
+			});
+			$(tabela.find(".resumo_head td")[1]).html(data_old.sala.players[0].nome + " & " + data_old.sala.players[2].nome);
+			$(tabela.find(".resumo_head td")[2]).html(data_old.sala.players[1].nome + " & " + data_old.sala.players[3].nome);
+		}
+
+		resumo.html(tabela);
+		if(data.player == player_id){
+			resumo.append("<br/><span class='btn btn_azul' onclick='return proxima();'>Começar</span>");
+			resumo.append("<span class='btn btn_vermelho' onclick='return terminar();'>Terminar</span>");
 		}
 		return false;
 	}
@@ -661,6 +768,10 @@ function editar_deck(sala){
 	$(".editar_deck_janela .hearts .grupo_preview").html( render.preview("hearts") );
 	$(".editar_deck_janela .clubs .grupo_preview").html( render.preview("clubs") );
 
+	$(".out_feltro .feltro").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
+		$("#feltro").val(hexcolor);
+	});
+
 	$(".editar_deck_janela .diams .ctl_bg").drawrpalette().bind("choose.drawrpalette", function(event, hexcolor){
 		$("#diams_bg").val(hexcolor);
 		$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
@@ -718,6 +829,7 @@ function editar_deck(sala){
 
 // Inicio [editar_deck_aplicar]
 function editar_deck_aplicar(sala){
+	var feltro = $("#feltro").val();
 	var diams_bg = $("#diams_bg").val();
 	var diams_fg = $("#diams_fg").val();
 	var spades_bg = $("#spades_bg").val();
@@ -726,7 +838,7 @@ function editar_deck_aplicar(sala){
 	var hearts_fg = $("#hearts_fg").val();
 	var clubs_bg = $("#clubs_bg").val();
 	var clubs_fg = $("#clubs_fg").val();
-	var cores = {diams:{bg: diams_bg, fg: diams_fg}, spades: {bg: spades_bg, fg: spades_fg}, hearts: {bg: hearts_bg, fg: hearts_fg}, clubs: {bg: clubs_bg, fg: clubs_fg}};
+	var cores = {feltro: feltro, diams:{bg: diams_bg, fg: diams_fg}, spades: {bg: spades_bg, fg: spades_fg}, hearts: {bg: hearts_bg, fg: hearts_fg}, clubs: {bg: clubs_bg, fg: clubs_fg}};
 	socket.emit("editar_deck_aplicar", {sala: sala, player: player_id, cores: cores});
 	$(".editar_deck_janela").dialog("close");
 	return false;
@@ -792,6 +904,7 @@ function editar_deck_ver(sala){
 // Inicio [editar_deck_ver_ok]
 function editar_deck_ver_ok(data){
 	var s = data.sala;
+	$("#feltro").val(s.cores.feltro);
 	$("#diams_bg").val(s.cores.diams.bg);
 	$("#diams_fg").val(s.cores.diams.fg);
 	$("#spades_bg").val(s.cores.spades.bg);
@@ -801,6 +914,7 @@ function editar_deck_ver_ok(data){
 	$("#clubs_bg").val(s.cores.clubs.bg);
 	$("#clubs_fg").val(s.cores.clubs.fg);
 
+	$(".out_feltro .feltro").val(s.cores.feltro);
 	$(".editar_deck_janela .diams .ctl_bg").val(s.cores.diams.bg);
 	$(".editar_deck_janela .diams .ctl_fg").val(s.cores.diams.fg);
 	$(".editar_deck_janela .spades .ctl_bg").val(s.cores.spades.bg);
@@ -810,6 +924,7 @@ function editar_deck_ver_ok(data){
 	$(".editar_deck_janela .clubs .ctl_bg").val(s.cores.clubs.bg);
 	$(".editar_deck_janela .clubs .ctl_fg").val(s.cores.clubs.fg);
 
+	$(".out_feltro .feltro").drawrpalette("set", s.cores.feltro);
 	$(".editar_deck_janela .diams .ctl_bg").drawrpalette("set", s.cores.diams.bg);
 	$(".editar_deck_janela .diams .ctl_fg").drawrpalette("set", s.cores.diams.fg);
 	$(".editar_deck_janela .spades .ctl_bg").drawrpalette("set", s.cores.spades.bg);
@@ -924,6 +1039,7 @@ function terminar_ok(data){
 	$(".player_jogo").dialog("destroy");
 	$(".jogo").hide();
 	$(".lobby").show();
+	render.limpa();
 	socket.emit("retomar", {player: player_id, socket: socket_id});
 }
 // Fim [terminar_ok]
@@ -1164,7 +1280,8 @@ function pegar_morto(){
 
 // Inicio [proxima]
 function proxima(){
-	$(".menu_adm").dialog("close");
+	//$(".menu_adm").dialog("close");
+	bi.LightboxEsconde({lightbox: "resumo"});
 	$(".other_jogos").html("");
 	socket.emit("proxima", {player: player_id, sala: sala_id});
 	return false;
@@ -1187,12 +1304,39 @@ function morto_mesa(){
 }
 // Fim [morto_mesa]
 
+// Inicio [resumo]
+function resumo(){
+	$(".menu_adm").dialog("close");
+	socket.emit("resumo", {player: player_id, sala: sala_id});
+	return false;
+}
+// Fim [resumo]
+
+// Inicio [resumo_ok]
+function resumo_ok(data){
+	data_old = data;
+	render.resumo(data);
+	bi.LightboxExibe({lightbox: "resumo"});
+	return false;
+}
+// Fim [resumo_ok]
+
+// Inicio [proxima_ok]
+function proxima_ok(data){
+	data_old = data;
+	render.limpa();
+	sala_update_ok(data);
+	return false;
+}
+// Fim [proxima_ok]
+
 // Inicio [sala_update_ok]
 function sala_update_ok(data){
 	console.log(data);
 	//render.deck( data );
 	data_old = data;
 	flag_morto = false;
+	render.feltro();
 	jogo_pos = jogo_pos_fn(player_id);
 	render.players( data );
 	render.mesa( data );
