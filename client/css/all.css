@@ -71,7 +71,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .editar_deck_janela .grupo_controle input {display: block;}
 .editar_deck_janela .grupo_preview {position: relative; display: inline-block;}
 
-.lightbox {position: absolute; display: inline-block; padding: 1em; font-size: 1em; font-weight: bold; color: #444; background-color: #ffffff; border: 1px solid #ccc;}
+.lightbox {position: absolute; display: inline-block; padding: 1em; font-size: 20px; font-weight: bold; color: #444; background-color: #ffffff; border: 1px solid #ccc;}
 
 .menu_adm {position: absolute; display: inline-block;}
 .menu_adm_opt > .ui-dialog-titlebar { display: none;}
@@ -108,12 +108,14 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .player_jogos {position: relative; display: block; width: inherit !important; height: 34%; top: 0;}
 .player_deck {position: relative; display: block; width: inherit !important; height: 20%; top: 0;}
 
-#resumo {min-width: 700px; overflow: auto;}
+#resumo {min-width: 700px; font-size: 1em; overflow: auto;}
 .resumo {position: relative; width: 100%; font-size: 16px;}
 .resumo .resumo_head td {padding: 10px; color: #4366a2; background: #ecf3ff; border: 1px solid #c1d1ec;}
 .resumo .resumo_body td {padding: 10px; border-bottom: 1px solid #eee;}
 .resumo .resumo_body td.pos {color: #37ba37; background: #ecffec; border-color: #c2f6c2;}
 .resumo .resumo_body td.neg {color: #ff0000; background: #ffe4e4; border-color: #f5d0d0;}
+.resumo .resumo_head td:first-child {color: #444; background: #fff; border: none; border-bottom: 1px solid #eee;}
+
 
 .btn_azul {color: #fff; background: #4285f4; border-color: #274d8c;}
 .btn_vermelho {color: #fff; background: #ed3232; border-color: #7e2424;}
