@@ -368,7 +368,7 @@ function Render(){
 			if(p){
 				if(p_star && p_star.id == p.id){ p_star_html = $("<span class='star'></span><br/>"); }
 				if(p_abacaxi && p_abacaxi.id == p.id){ p_star_html = $("<span class='abacaxi'></span><br/>"); }
-				var p_pts = $("<span class='pts'>"+p.pts+"</span>");
+				var p_pts_html = $("<span class='pts'>"+p.pts+"</span>");
 				var p_html = $("<span class='player' uid='"+p.id+"' onclick='player_click(this);'><span class='nome'>"+p.nome+"</span></span>");
 				var p_cartas = $("<span class='num'>"+p.deck.body.length+"</span>");
 				if(p.morto){
@@ -397,7 +397,7 @@ function Render(){
 				p_html.append(p_cartas);
 				p_html.append(p_morto);
 				p_html.append(p_score);
-				p_html.append(p_pts);
+				//p_html.append(p_pts_html);
 				//div.append(p_html);
 
 				p_out.append(p_html);
