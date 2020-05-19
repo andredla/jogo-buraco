@@ -332,9 +332,28 @@ function Render(){
 		return false;
 	}
 
+	this.find_star = function(tipo){
+		var temp = [];
+		for(var player in data_old.sala.players){
+			var p = data_old.sala.players[player];
+			temp.push(p);
+		}
+		if(tipo == "desc"){
+			temp.sort(function(a, b){return b.pts-a.pts});
+		}
+		if(tipo == "asc"){
+			temp.sort(function(a, b){return a.pts-b.pts});
+		}
+		var ret = null;
+		if(temp.length >= 2 && temp[1].pts != temp[0].pts){ ret = temp[0]; }
+		return ret;
+	}
+
 	this.players = function(data){
 		//console.log(data);
 		//var div = $(".players");
+		var p_star = this.find_star("desc");
+		var p_abacaxi = this.find_star("asc");
 		var p_own = player_find();
 		var div = $(".meio");
 		var btn_adm = $("<span class='btn btn_preto btn_adm' onclick='menu_adm();'>...</span>");
@@ -345,7 +364,11 @@ function Render(){
 		var p_out = $("<span class='players'></span>");
 		for(var player in players){
 			var p = players[player];
+			var p_star_html = $("<br/>");
 			if(p){
+				if(p_star && p_star.id == p.id){ p_star_html = $("<span class='star'></span><br/>"); }
+				if(p_abacaxi && p_abacaxi.id == p.id){ p_star_html = $("<span class='abacaxi'></span><br/>"); }
+				var p_pts = $("<span class='pts'>"+p.pts+"</span>");
 				var p_html = $("<span class='player' uid='"+p.id+"' onclick='player_click(this);'><span class='nome'>"+p.nome+"</span></span>");
 				var p_cartas = $("<span class='num'>"+p.deck.body.length+"</span>");
 				if(p.morto){
@@ -370,9 +393,11 @@ function Render(){
 						}
 					}
 				}
+				p_html.append(p_star_html);
 				p_html.append(p_cartas);
 				p_html.append(p_morto);
 				p_html.append(p_score);
+				p_html.append(p_pts);
 				//div.append(p_html);
 
 				p_out.append(p_html);
