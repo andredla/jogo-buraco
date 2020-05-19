@@ -28,7 +28,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 
 .players {position: relative; display: inline-block;}
 .players .player {position: relative; display: inline-block; padding: 5px; margin: 5px; background-color: #fff; border: 1px solid #eee; cursor: pointer;}
-.players .player .nome {position: relative; display: block; padding: 5px;}
+.players .player .nome {position: relative; display: inline-block; padding: 5px;}
 .players .player .num {position: relative; display: inline-block; padding: 5px;}
 .players .player .morto {position: relative; display: inline-block; padding: 0.4em; border: 1px solid #c32c2c; border-radius: 50%;}
 .players .player .morto_on {position: relative; display: inline-block; padding: 0.4em; background-color: #e91f1f; border: 1px solid #c32c2c; border-radius: 50%;}
@@ -116,6 +116,8 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .resumo .resumo_body td.neg {color: #ff0000; background: #ffe4e4; border-color: #f5d0d0;}
 .resumo .resumo_head td:first-child {color: #444; background: #fff; border: none; border-bottom: 1px solid #eee;}
 
+.star {position: relative; display: inline-block; padding: 12px; background: url(/client/imgs/star.svg); background-size: 24px; z-index: 6;}
+.abacaxi {position: relative; display: inline-block; padding: 13px; background: url(/client/imgs/abacaxi.svg); background-size: 26px; z-index: 6;}
 
 .btn_preto {color: #fff !important; background: #444 !important; border-color: #000 !important;}
 .btn_azul {color: #fff !important; background: #4285f4 !important; border-color: #274d8c !important;}
