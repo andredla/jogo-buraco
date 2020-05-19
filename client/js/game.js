@@ -337,7 +337,7 @@ function Render(){
 		//var div = $(".players");
 		var p_own = player_find();
 		var div = $(".meio");
-		var btn_adm = $("<span class='btn btn_adm' onclick='menu_adm();'>...</span>");
+		var btn_adm = $("<span class='btn btn_preto btn_adm' onclick='menu_adm();'>...</span>");
 		//div.html("");
 		//$(".players").html("");
 		$(".players").remove();
@@ -820,7 +820,7 @@ function editar_deck(sala){
 
 	$(".editar_deck_janela").dialog({ width: 900, height: 600,
 		"buttons":[
-		{text: "Aplicar", class: "btn", click: function(){ editar_deck_aplicar(sala); }}
+		{text: "Aplicar", class: "", click: function(){ editar_deck_aplicar(sala); }}
 		]
 	}).closest(".ui-dialog").draggable({containment: ""});
 	return false;
