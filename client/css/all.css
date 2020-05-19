@@ -108,7 +108,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .player_jogos {position: relative; display: block; width: inherit !important; height: 34%; top: 0;}
 .player_deck {position: relative; display: block; width: inherit !important; height: 20%; top: 0;}
 
-#resumo {min-width: 700px; font-size: 1em; overflow: auto;}
+#resumo {min-width: 90%; font-size: 1em; overflow: auto;}
 .resumo {position: relative; width: 100%; font-size: 16px;}
 .resumo .resumo_head td {padding: 10px; color: #4366a2; background: #ecf3ff; border: 1px solid #c1d1ec;}
 .resumo .resumo_body td {padding: 10px; border-bottom: 1px solid #eee;}
