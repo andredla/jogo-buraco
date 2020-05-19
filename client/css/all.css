@@ -3,7 +3,7 @@
 html, body {height: 100%; text-align: center; background: #f6f6f6; font-family: Arial; font-size: 16px; -webkit-user-select: none; overflow: hidden;}
 canvas {position: relative; display: inline-block; vertical-align: middle; -webkit-transform: translate3d(0,0,0);}
 
-.btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; background-color: #ccc; color: #444; border: 1px solid #ccc; cursor: pointer;}
+.btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; font-weight: bold; background-color: #ccc; color: #444; border: 1px solid #ccc; cursor: pointer;}
 .btn_menor {font-size: 14px; padding: 0.5em;}
 
 /* Inicio [versao_1] */
@@ -117,8 +117,9 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .resumo .resumo_head td:first-child {color: #444; background: #fff; border: none; border-bottom: 1px solid #eee;}
 
 
-.btn_azul {color: #fff; background: #4285f4; border-color: #274d8c;}
-.btn_vermelho {color: #fff; background: #ed3232; border-color: #7e2424;}
+.btn_preto {color: #fff !important; background: #444 !important; border-color: #000 !important;}
+.btn_azul {color: #fff !important; background: #4285f4 !important; border-color: #274d8c !important;}
+.btn_vermelho {color: #fff !important; background: #ed3232 !important; border-color: #7e2424 !important;}
 /* Fim [versao_2] */
 
 
