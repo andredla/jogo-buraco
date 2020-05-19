@@ -146,6 +146,24 @@ function Sala(){
 			p1.calcula();
 			p2.calcula();
 
+			p1.pts_temp = 0;
+			p2.pts_temp = 0;
+			p3.pts_temp = 0;
+			p4.pts_temp = 0;
+
+			if(p1.deck.body.length <=0){
+				p1.pts_temp += 100;
+			}
+			if(p3.deck.body.length <=0){
+				p3.pts_temp += 100;
+			}
+			if(p2.deck.body.length <=0){
+				p2.pts_temp += 100;
+			}
+			if(p4.deck.body.length <=0){
+				p4.pts_temp += 100;
+			}
+
 			if(p1.deck.body.length <=0 || p3.deck.body.length <=0){
 				p1.score_temp += 100;
 				p1.resumo.batida += 100;
@@ -159,11 +177,20 @@ function Sala(){
 			if(!p1.morto && !p3.morto){
 				p1.score_temp -= 100;
 				p1.resumo.morto -= 100;
+				p1.pts_temp -= 100;
+				p3.pts_temp -= 100;
 			}
 			if(!p2.morto && !p4.morto){
 				p2.score_temp -= 100;
 				p2.resumo.morto -= 100;
+				p2.pts_temp -= 100;
+				p4.pts_temp -= 100;
 			}
+
+			p1.pts_temp -= p1.deck.soma_jogo();
+			p3.pts_temp -= p3.deck.soma_jogo();
+			p2.pts_temp -= p2.deck.soma_jogo();
+			p4.pts_temp -= p4.deck.soma_jogo();
 
 			p1.score_temp -= p1.deck.soma_jogo();
 			p1.score_temp -= p3.deck.soma_jogo();
@@ -182,16 +209,20 @@ function Sala(){
 				var p = this.players[player];
 				if(p){
 					p.calcula();
+					p.pts_temp = 0;
 					if(p.deck.body.length <=0){
 						p.score_temp += 100;
 						p.resumo.batida += 100;
+						p.pts_temp += 100;
 					}
 					if(!p.morto){
 						p.score_temp -= 100;
 						p.resumo.morto -= 100;
+						p.pts_temp -= 100;
 					}
 					p.score_temp -= p.deck.soma_jogo();
 					p.resumo.mao -= p.deck.soma_jogo();
+					p.pts_temp -= p.deck.soma_jogo();
 					//p.score = p.score_temp;
 				}
 			}
@@ -385,6 +416,8 @@ function Player(){
 	this.score = 0;
 	this.score_temp = 0;
 	this.resumo = {real: 0, suja: 0, mesa: 0, batida: 0, mao: 0, morto: 0};
+	this.pts = 0;
+	this.pts_temp = 0;
 
 	this.cria = function(id, socket_id, nome, lugar){
 		this.id = id;
@@ -1107,6 +1140,7 @@ function baixar_jogo(data){
 		var uid = data.cartas[carta];
 		anima_cartas.push(uid);
 		var c = p.player.deck.find_carta(uid);
+		p.player.pts += cartas[c.id].pontos;
 		if(c){
 			d1.body.push(c);
 		}
@@ -1140,6 +1174,7 @@ function baixar_jogo_add(data){
 		var uid = data.cartas[carta];
 		anima_cartas.push(uid);
 		var c = p.player.deck.find_carta(uid);
+		p.player.pts += cartas[c.id].pontos;
 		//console.log(p.player.jogos[data.jogo]);
 		//p.player.jogos[data.jogo].body.push(c);
 		if(c){
@@ -1170,6 +1205,7 @@ function baixar_jogo_rem(data){
 	for(var carta in data.cartas){
 		var uid = data.cartas[carta];
 		var c = p.player.jogos[data.jogo].find_carta(uid);
+		p_dest.player.pts -= cartas[c.id].pontos;
 		//p.player.deck.body.push(c);
 		if(c){
 			p_dest.player.deck.body.push(c);
@@ -1223,6 +1259,7 @@ function pegar_morto(data){
 		p.player.deck = new Deck();
 		p.player.deck = m;
 		p.player.morto = true;
+		p.player.pts += 100;
 
 		io.in(data.sala).emit("sala_update_ok", {sala: s});
 	}
@@ -1257,6 +1294,7 @@ function proxima(data){
 		if(p){
 			p.morto = false;
 			p.score = p.score_temp;
+			p.pts += p.pts_temp;
 		}
 	}
 	s.start();
