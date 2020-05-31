@@ -20,6 +20,7 @@ function Sala(){
 	this.cores = {feltro: "#1FAB90", diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
 	this.flag_compra = false;
 	this.flag_descarta = false;
+	this.embaralhar = 0;
 
 	this.cria = function(){
 		// Create a unique Socket.IO Room
@@ -326,7 +327,10 @@ function Sala(){
 		this.deck.merge(d1, d2);
 		//this.deck = d1;
 
-		this.deck.shuffle();
+		for(var a=1; a<=this.embaralhar; a++){
+			console.log("embaralhando...");
+			this.deck.shuffle();
+		}
 
 		var m1 = new Deck();
 		var m2 = new Deck();
@@ -1008,6 +1012,7 @@ function sala_start(data){
 	console.log(data);
 	var sala = salas[data.sala];
 	if(sala && (sala.started || sala.vazia())){return false;}
+	sala.embaralhar = data.embaralhar;
 	sala.start();
 	//sala.start_debug();
 
