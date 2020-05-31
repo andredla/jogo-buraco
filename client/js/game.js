@@ -10,6 +10,7 @@ var jogo_pos = [];
 var flag_morto = false;
 var flag_resource = false;
 var flag_audio = false;
+var embaralhar_num = 1;
 
 $.getJSON("/client/js/cartas.json", function(json){
 	cartas = json;
@@ -230,7 +231,7 @@ function Render(){
 		salas.html("");
 
 		for(var s in data.salas){
-			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span><br/><span onclick='editar_deck_ver(\""+s+"\");'>Ver baralho</span></span></br>");
+			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='embaralhar();'>Embaralhar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span><br/><span onclick='editar_deck_ver(\""+s+"\");'>Ver baralho</span></span></br>");
 			salas.append( sala );
 			for(var p in data.salas[s].players){
 				var player = data.salas[s].players[p];
@@ -1002,9 +1003,16 @@ function sala_entra_ok(data){
 }
 // Fim [sala_entra_ok]
 
+// Inicio [embaralhar]
+function embaralhar(){
+	embaralhar_num++;
+	return false;
+}
+// Fim [embaralhar]
+
 // Inicio [sala_start]
 function sala_start(sala){
-	socket.emit("sala_start", {sala: sala});
+	socket.emit("sala_start", {sala: sala, embaralhar: embaralhar_num});
 	return false;
 }
 // Fim [sala_start]
@@ -1061,6 +1069,7 @@ function terminar_ok(data){
 	data_old = data;
 	//$(".meio").dialog("destroy");
 	//$(".player_deck").dialog("destroy");
+	embaralhar_num = 1;
 	$(".player_jogo").dialog("destroy");
 	$(".jogo").hide();
 	$(".lobby").show();
