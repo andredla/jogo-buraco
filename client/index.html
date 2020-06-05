@@ -30,14 +30,19 @@
 </head>
 <body>
 
+	<!-- Inicio [load] -->
+	<div id="load" class="load">
+		<span class="wrap">
+			<span class="diams"></span>
+			<span class="spades"></span>
+			<span class="hearts"></span>
+			<span class="clubs"></span>
+		</span>
+	</div>
+	<!-- Fim [load] -->
+
  <!-- Inicio [lobby] -->
 	<div class="lobby">
-		<a class="btn btn_azul" href="#" onclick="return sala_cria();">Criar Sala</a>
-		<a class="btn btn_azul" href="#" onclick="return retomar();">Retomar</a>
-		<!--<a class="btn" href="#" onclick="return editar_deck();">Editar baralho</a>-->
-		<br/>
-		<input type="text" id="player_nome" name="nome" value="">
-
 		<input type="hidden" id="feltro" value="#1FAB90">
 		<input type="hidden" id="diams_bg" value="#ffffff">
 		<input type="hidden" id="diams_fg" value="#ff0000">
@@ -48,7 +53,17 @@
 		<input type="hidden" id="clubs_bg" value="#ffffff">
 		<input type="hidden" id="clubs_fg" value="#444444">
 
-		<span class="salas"></span>
+		<span class="wrap_top">
+			<span class="logo"><img src="client/imgs/logo.svg" width="300"></span>
+			<a class="btn btn_azul" href="#" onclick="return sala_cria();">Criar Sala</a>
+			<a class="btn btn_azul" href="#" onclick="return retomar();">Retomar</a>
+			<!--<a class="btn" href="#" onclick="return editar_deck();">Editar baralho</a>-->
+			<br/>
+			<input type="text" id="player_nome" name="nome" value="">
+		</span>
+		<span class="wrap_bottom">
+			<span class="salas"></span>
+		</span>
 	</div>
 	<!-- Fim [lobby] -->
 
