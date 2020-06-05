@@ -231,7 +231,8 @@ function Render(){
 		salas.html("");
 
 		for(var s in data.salas){
-			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='embaralhar();'>Embaralhar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span><br/><span onclick='editar_deck_ver(\""+s+"\");'>Ver baralho</span></span></br>");
+			//var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><br/><span onclick='embaralhar();'>Embaralhar</span><br/><span onclick='editar_deck(\""+s+"\");'>Editar baralho</span><br/><span onclick='editar_deck_ver(\""+s+"\");'>Ver baralho</span></span></br>");
+			var sala = $("<span class='sala' sid='"+s+"'><span class='lugares'><span class='P1' onclick='sala_entra(1, \""+s+"\");'></span><span class='P2' onclick='sala_entra(2, \""+s+"\");'></span><span class='P3' onclick='sala_entra(3, \""+s+"\");'></span><span class='P4' onclick='sala_entra(4, \""+s+"\");'></span></span><span class='opts'><span onclick='sala_start(\""+s+"\");'>Começar</span><span onclick='bi.Menu({el: this, pos: \"td\", opcoes: [\"Embaralhar\", \"Editar baralho\", \"Ver baralho\"], funcao: [\"embaralhar()\", \"editar_deck("+s+")\", \"editar_deck_ver("+s+")\"]});'>...</span>");
 			salas.append( sala );
 			for(var p in data.salas[s].players){
 				var player = data.salas[s].players[p];
@@ -789,6 +790,7 @@ function player_find(){
 
 // Inicio [editar_deck]
 function editar_deck(sala){
+	bi.MenuEsconde();
 	$(".editar_deck_janela .diams .grupo_preview").html( render.preview("diams") );
 	$(".editar_deck_janela .spades .grupo_preview").html( render.preview("spades") );
 	$(".editar_deck_janela .hearts .grupo_preview").html( render.preview("hearts") );
@@ -922,6 +924,7 @@ function retomar(){
 
 // Inicio [editar_deck_ver]
 function editar_deck_ver(sala){
+	bi.MenuEsconde();
 	socket.emit("editar_deck_ver", {sala: sala, player: player_id, socket: socket_id });
 	return false;
 }
@@ -1005,6 +1008,7 @@ function sala_entra_ok(data){
 
 // Inicio [embaralhar]
 function embaralhar(){
+	bi.MenuEsconde();
 	embaralhar_num++;
 	return false;
 }
@@ -1069,6 +1073,7 @@ function terminar_ok(data){
 	data_old = data;
 	//$(".meio").dialog("destroy");
 	//$(".player_deck").dialog("destroy");
+	//$("body").css({"overflow": "auto"});
 	embaralhar_num = 1;
 	$(".player_jogo").dialog("destroy");
 	$(".jogo").hide();
@@ -1370,6 +1375,7 @@ function sala_update_ok(data){
 	//render.deck( data );
 	data_old = data;
 	flag_morto = false;
+	//$("body").css({"overflow": "hidden"});
 	render.feltro();
 	jogo_pos = jogo_pos_fn(player_id);
 	render.players( data );
