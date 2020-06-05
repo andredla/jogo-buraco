@@ -1,15 +1,22 @@
 * {margin: 0px; padding: 0px; vertical-align: middle; touch-action: manipulation;}
 
 html, body {height: 100%; text-align: center; background: #f6f6f6; font-family: Arial; font-size: 16px; -webkit-user-select: none; overflow: hidden;}
+body {background-color: #1FAB90; -webkit-overflow-scrolling: touch;}
 canvas {position: relative; display: inline-block; vertical-align: middle; -webkit-transform: translate3d(0,0,0);}
 
 .btn {position: relative; display: inline-block; padding: 1em; margin: 0.5em; text-decoration: none; font-weight: bold; background-color: #ccc; color: #444; border: 1px solid #ccc; cursor: pointer;}
 .btn_menor {font-size: 14px; padding: 0.5em;}
 
+.over {width: 100%; height: 100%;}
+
 /* Inicio [versao_1] */
-.lobby {position: relative; display: inline-block; padding: 10px; margin: 10px;}
+#player_nome {padding: 10px;}
+.lobby {position: relative; display: block; min-height: 100%}
+.lobby .logo {position: relative; display: block;}
+.lobby .wrap_top {position: absolute; display: block; height: 50%; width: 100%; overflow: auto;}
+.lobby .wrap_bottom {position: absolute; display: block; height: 50%; width: 100%; top: 50%; overflow: auto;}
 .salas {position: relative; display: block; padding: 5px; margin: 2px;}
-.salas .sala {position: relative; display: inline-block; margin: 0.2em;}
+.salas .sala {position: relative; display: inline-block; margin: 0.5em; background-color: #20826F;}
 .salas .sala .lugares {position: relative; display: block; position: relative; display: inline-block; padding: 30px; margin: 0px; min-width: 120px; min-height: 120px; border: 1px solid #ccc;}
 .salas .sala .opts {position: relative; display: block; padding: 10px;}
 .salas .P1, .salas .P2, .salas .P3, .salas .P4 {position: absolute; display: inline-block; min-width: 20px; min-height: 20px; padding: 10px; background-color: #fff; cursor: pointer;}
@@ -19,7 +26,7 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 .salas .P4 {top: 50%; left: 0; -webkit-transform: translateY(-50%); max-width: 50%;}
 
 .sala .opts {position: relative; display: block; background-color: #444; border: 1px solid #000;}
-.sala .opts span {position: relative; display: inline-block; padding: 0.5em; margin: 0.1em; background-color: #eee; cursor: pointer;}
+.sala .opts span {position: relative; display: inline-block; padding: 0.5em; margin: 0.1em 0.3em; background-color: #eee; cursor: pointer;}
 
 .carta {position: relative; display: inline-block; margin: 2px; background-color: #fff; border: 1px solid #ddd; cursor: pointer; z-index: 2; -webkit-transform: translate3d(0,0,0); transition: all 0.1s;}
 .carta .ind {position: absolute; display: inline-block; left: 5%; top: 5%; font-size: 18px; font-weight: bold; z-index: 3; -webkit-transform: translate3d(0,0,0);}
@@ -80,6 +87,27 @@ canvas {position: relative; display: inline-block; vertical-align: middle; -webk
 /* Fim [versao_1] */
 
 /* Inicio [versao_2] */
+.load {position: absolute; display: inline-block; background-color: #fff;}
+.load .wrap {position: relative; display: block; padding: 10px;}
+.load .diams {position: relative; display: inline-block; padding: 25px; background: url(/client/imgs/diams.svg) no-repeat center; animation: load 1s ease-in-out infinite; animation-delay: 0s;}
+.load .spades {position: relative; display: inline-block; padding: 25px; background: url(/client/imgs/spades.svg) no-repeat center; animation: load 1s ease-in-out infinite; animation-delay: 0.4s;}
+.load .hearts {position: relative; display: inline-block; padding: 25px; background: url(/client/imgs/hearts.svg) no-repeat center; animation: load 1s ease-in-out infinite; animation-delay: 0.6s;}
+.load .clubs {position: relative; display: inline-block; padding: 25px; background: url(/client/imgs/clubs.svg) no-repeat center; animation: load 1s ease-in-out infinite; animation-delay: 0.8s;}
+
+@keyframes load {
+  0%, 25% {
+    -webkit-transform: scale(1);
+  }
+  50%{
+  	-webkit-transform: scale(1.3);
+  }
+  75%, 100% {
+    -webkit-transform: scale(1);
+  }
+}
+.bi_menu {position: absolute; display: inline-block; background-color: #fff; border: 1px solid #ccc; -webkit-box-shadow: 1px 1px 3px #bebebe;}
+.bi_menu a { position: relative; display: block; padding: 10px 20px; text-align: left; text-decoration: none; font-family: Arial; font-size: 12px; font-weight: bold; color: #777; border: 1px solid #fff; border-left: none; border-right: none; cursor: pointer;}
+
 .destaque {border: 1px solid #00ff00 !important; -webkit-transform: translateY(-5%);}
 .destaque::after {background: #00ff00; opacity: 0.2; z-index: 5;}
 
