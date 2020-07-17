@@ -276,6 +276,11 @@ function Sala(){
 	}
 
 	this.start_debug = function(){
+		this.started = true;
+		this.lugares = [];
+		this.flag_compra = false;
+		this.flag_descarta = false;
+
 		var d0 = new Deck();
 		d0.init({back: "#D03737"});
 
@@ -293,10 +298,12 @@ function Sala(){
 		d4.init({diams_bg: "#F7C96B", diams_fg: "#444444", spades_bg: "#A7CBFD", spades_fg: "#444444", hearts_bg: "#F97690", hearts_fg: "#444444", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
 
 		this.deck = new Deck();
-		//this.deck.merge(this.deck, d0);
-		//this.deck.merge(this.deck, d1);
-		//this.deck.merge(this.deck, d2);
+		this.deck.merge(this.deck, d0);
+		this.deck.merge(this.deck, d1);
+		this.deck.merge(this.deck, d2);
 		this.deck.merge(this.deck, d3);
+
+		this.players_fix();
 
 		this.players[0].deck = new Deck();
 		this.players[0].deck = this.deck;
@@ -650,6 +657,9 @@ function Deck(){
 		if(this.body.length > 0){
 			max = this.body[0].id;
 			min = this.body[this.body.length-1].id;
+		}
+		if(min == 2 && this.body[this.body.length-2].id != 3){
+			min = this.body[this.body.length-2].id;
 		}
 		if(ace){
 			if((14 - max) <= (min - 1)){
