@@ -1,4 +1,5 @@
 {
+	"0": {"label": "", "pontos": 20, "sprite": "joker"},
 	"1": {"label": "A", "pontos": 20},
 	"2": {"label": "2", "pontos": 10},
 	"3": {"label": "3", "pontos": 5},
