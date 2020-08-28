@@ -603,6 +603,19 @@ function Render(){
 		ctx.fillRect(0, 0, this.bounds.w, this.bounds.h);
 
 		var naipe = this.tint(this.imgs[c.naipe], this.bounds.na, this.bounds.na, c.fgcolor);
+
+		joker_css = "";
+		if(c.id == 0){
+			joker_css = " joker_css";
+			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.h, c.fgcolor);
+			di = {w: this.bounds.w/2.5, h: this.bounds.h/2.5};
+			ctx.drawImage(fig[0], 0, 0, di.w, di.h);
+			//this.naipe({w:4, h:5}, {x:0.3, y: -1.5, w: this.bounds.w/2.5, h: this.bounds.h/2.5}, ctx, fig);
+			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.h}, ctx, fig);
+			//this.naipe({w:4, h:5}, {x:2.7, y:5.5, w: this.bounds.w/2.5, h: this.bounds.h/2.5}, ctx, fig);
+			ctx.drawImage(fig[0], this.bounds.w-di.w, this.bounds.h-di.h, di.w, di.h);
+		}
+
 		if(c.id == 1){
 			this.naipe({w:4, h:5}, {x:0.15, y:0, w: this.bounds.ns, h: this.bounds.ns}, ctx, naipe);
 			this.naipe({w:4, h:5}, {x:1.5, y:2.5, w: this.bounds.na, h: this.bounds.na}, ctx, naipe);
@@ -749,8 +762,11 @@ function Render(){
 		var borda = tinycolor(c.bgcolor).darken(20).toString();
 		carta.css({"border-color": borda});
 
-		var ind = $("<span class='ind'>"+cartas[c.id+""].label+"</span>");
+		var ind = $("<span class='ind"+joker_css+"'>"+cartas[c.id+""].label+"</span>");
 		ind.css({color: c.fgcolor, "font-size": this.bounds.w/3.5 + "px"});
+		//if(c.id == 0){
+			//ind.css({color: c.fgcolor, "font-size": this.bounds.w/4.5 + "px"});
+		//}
 		carta.append(ind);
 
 		carta.prepend( canvas );
@@ -857,6 +873,12 @@ function editar_deck(sala){
 
 // Inicio [editar_deck_aplicar]
 function editar_deck_aplicar(sala){
+	$("#joker").val(0);
+	var joker_inp = $(".joker").attr("checked");
+	if(joker_inp){
+		$("#joker").val(1);
+	}
+	var joker = $("#joker").val();
 	var feltro = $("#feltro").val();
 	var diams_bg = $("#diams_bg").val();
 	var diams_fg = $("#diams_fg").val();
@@ -866,7 +888,7 @@ function editar_deck_aplicar(sala){
 	var hearts_fg = $("#hearts_fg").val();
 	var clubs_bg = $("#clubs_bg").val();
 	var clubs_fg = $("#clubs_fg").val();
-	var cores = {feltro: feltro, diams:{bg: diams_bg, fg: diams_fg}, spades: {bg: spades_bg, fg: spades_fg}, hearts: {bg: hearts_bg, fg: hearts_fg}, clubs: {bg: clubs_bg, fg: clubs_fg}};
+	var cores = {joker: joker, feltro: feltro, diams:{bg: diams_bg, fg: diams_fg}, spades: {bg: spades_bg, fg: spades_fg}, hearts: {bg: hearts_bg, fg: hearts_fg}, clubs: {bg: clubs_bg, fg: clubs_fg}};
 	socket.emit("editar_deck_aplicar", {sala: sala, player: player_id, cores: cores});
 	$(".editar_deck_janela").dialog("close");
 	return false;
@@ -933,6 +955,7 @@ function editar_deck_ver(sala){
 // Inicio [editar_deck_ver_ok]
 function editar_deck_ver_ok(data){
 	var s = data.sala;
+	$("#joker").val(s.cores.joker);
 	$("#feltro").val(s.cores.feltro);
 	$("#diams_bg").val(s.cores.diams.bg);
 	$("#diams_fg").val(s.cores.diams.fg);
@@ -943,6 +966,7 @@ function editar_deck_ver_ok(data){
 	$("#clubs_bg").val(s.cores.clubs.bg);
 	$("#clubs_fg").val(s.cores.clubs.fg);
 
+	$(".joker").attr("checked", Boolean(Number(s.cores.joker)));
 	$(".out_feltro .feltro").val(s.cores.feltro);
 	$(".editar_deck_janela .diams .ctl_bg").val(s.cores.diams.bg);
 	$(".editar_deck_janela .diams .ctl_fg").val(s.cores.diams.fg);
@@ -1415,7 +1439,7 @@ $(function(){
 	$("#player_nome").val( $.cookie("player_nome") );
 	render = new Render();
 	bi.LightboxExibe({lightbox: "load"});
-	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back", "eye"], function(){
+	render.preload( ["clubs", "diams", "hearts", "spades", "jack", "queen", "king", "back", "eye", "joker"], function(){
 		flag_resource = true;
 		var eye = render.tint(render.imgs["eye"], 50, 50, "#ffffff");
 		$(".display_cartas").html(eye);
