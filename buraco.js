@@ -749,7 +749,7 @@ function Deck(){
 		var ret = "";
 		for(var carta in this.body){
 			var c = this.body[carta];
-			if(c.id != "2"){
+			if(c.id != "2" && c.id != "0"){
 				ret = c.naipe;
 				break;
 			}
