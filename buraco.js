@@ -17,7 +17,7 @@ function Sala(){
 	this.vez = null;
 	this.vez_ultima = null;
 	this.lugares = [];
-	this.cores = {feltro: "#1FAB90", diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
+	this.cores = {joker: 0, feltro: "#1FAB90", diams: {bg: "#ffffff", fg: "#ff0000"}, spades: {bg: "#ffffff", fg: "#444444"}, hearts: {bg: "#ffffff", fg: "#ff0000"}, clubs: {bg: "#ffffff", fg: "#444444"}};
 	this.flag_compra = false;
 	this.flag_descarta = false;
 	this.embaralhar = 0;
@@ -294,8 +294,26 @@ function Sala(){
 		d3.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
 		
 
-		var d4 = new Deck();
-		d4.init({diams_bg: "#F7C96B", diams_fg: "#444444", spades_bg: "#A7CBFD", spades_fg: "#444444", hearts_bg: "#F97690", hearts_fg: "#444444", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
+		//var d4 = new Deck();
+		//d4.init({diams_bg: "#F7C96B", diams_fg: "#444444", spades_bg: "#A7CBFD", spades_fg: "#444444", hearts_bg: "#F97690", hearts_fg: "#444444", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
+
+		if(this.cores.joker == "1"){
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#ffffff", fgcolor: "#444444", back: "#D03737"});
+			d0.body.push(c);
+
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#ffffff", fgcolor: "#ff0000", back: "#1313AF"});
+			d1.body.push(c);
+
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#444444", fgcolor: "#ffffff", back: "#1313AF"});
+			d2.body.push(c);
+
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#E9ECF2", fgcolor: "#444444", back: "#1313AF"});
+			d3.body.push(c);
+		}
 
 		this.deck = new Deck();
 		this.deck.merge(this.deck, d0);
@@ -322,13 +340,23 @@ function Sala(){
 		this.mesa = new Deck();
 		var d1 = new Deck();
 		//d1.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#D03737"});
-		d1.init({diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#D03737"});
+		d1.init({joker: this.cores.joker, diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#D03737"});
 		d1.shuffle();
 
 		var d2 = new Deck();
 		//d2.init({diams_bg: "#FFDE9B", diams_fg: "#7A5B1C", spades_bg: "#A7CBFD", spades_fg: "#264571", hearts_bg: "#F4CFE1", hearts_fg: "#CA186E", clubs_bg: "#E9ECF2", clubs_fg: "#444444", back: "#1313AF"});
-		d2.init({diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#1313AF"});
+		d2.init({joker: this.cores.joker, diams_bg: this.cores.diams.bg, diams_fg: this.cores.diams.fg, spades_bg: this.cores.spades.bg, spades_fg: this.cores.spades.fg, hearts_bg: this.cores.hearts.bg, hearts_fg: this.cores.hearts.fg, clubs_bg: this.cores.clubs.bg, clubs_fg: this.cores.clubs.fg, back: "#1313AF"});
 		d2.shuffle();
+
+		if(this.cores.joker == "1"){
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#ffffff", fgcolor: "#ff0000", back: "#D03737"});
+			d1.body.push(c);
+
+			var c = new Carta();
+			c.init({id: 0, naipe: "clubs", bgcolor: "#ffffff", fgcolor: "#444444", back: "#1313AF"});
+			d2.body.push(c);
+		}
 
 		this.deck = new Deck();
 		this.deck.merge(d1, d2);
@@ -650,6 +678,23 @@ function Deck(){
 		return false;
 	}
 
+	this.order_joker = function(){
+		var temp = [];
+		var joker = this.find_carta_val("0", 1);
+		for(var carta in this.body){
+			var c = this.body[carta];
+			var c_next = this.body[parseInt(carta)+1];
+			if(c && c_next && parseInt(c.id)-parseInt(c_next.id) > 1 && joker){
+				this.body.splice(parseInt(carta)+1, 0, joker);
+				return false;
+			}
+		}
+		if(joker){
+			this.body.push(joker);
+		}
+		return false;
+	}
+
 	this.order_ace = function(){
 		var ace = this.find_carta_val("1", 1);
 		var max = 13;
@@ -760,6 +805,7 @@ function Deck(){
 			delta = 0;
 		}
 
+		var joker = this.find_carta_val("0", 0);
 		var dois = this.find_carta_val("2", 0);
 		var naipe = this.find_naipe();
 		var coringa = this.coringa_obj();
@@ -787,6 +833,10 @@ function Deck(){
 		}
 
 		if(tot >= 7 && dois && coringa.total >= 2){
+			ret = 2;
+		}
+
+		if(joker){
 			ret = 2;
 		}
 
@@ -953,6 +1003,7 @@ function editar_deck_aplicar(data){
 	console.log(data);
 	var sala = salas[data.sala];
 	var cores = data.cores;
+	sala.cores.joker = cores.joker;
 	sala.cores.feltro = cores.feltro;
 	sala.cores.diams.bg = cores.diams.bg;
 	sala.cores.diams.fg = cores.diams.fg;
@@ -1165,6 +1216,7 @@ function baixar_jogo(data){
 	p_dest.player.jogos.push(d1);
 	p_dest.player.jogos[p_dest.player.jogos.length-1].order();
 	p_dest.player.jogos[p_dest.player.jogos.length-1].order_coringa();
+	p_dest.player.jogos[p_dest.player.jogos.length-1].order_joker();
 	p_dest.player.jogos[p_dest.player.jogos.length-1].order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
@@ -1199,6 +1251,7 @@ function baixar_jogo_add(data){
 	//p.player.jogos[data.jogo].order();
 	p_dest.player.jogos[data.jogo].order();
 	p_dest.player.jogos[data.jogo].order_coringa();
+	p_dest.player.jogos[data.jogo].order_joker();
 	p_dest.player.jogos[data.jogo].order_ace();
 	baixar_fix( p_dest );
 	p_dest.player.calcula();
