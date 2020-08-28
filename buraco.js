@@ -836,7 +836,7 @@ function Deck(){
 			ret = 2;
 		}
 
-		if(joker){
+		if(tot >= 7 && joker){
 			ret = 2;
 		}
 
