@@ -607,13 +607,14 @@ function Render(){
 		joker_css = "";
 		if(c.id == 0){
 			joker_css = " joker_css";
-			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.h, c.fgcolor);
+			var off = {x: this.bounds.w/20, y: this.bounds.w/8};
+			var fig = this.tint(this.imgs[cartas[c.id].sprite], this.bounds.w, this.bounds.w, c.fgcolor);
 			di = {w: this.bounds.w/2.5, h: this.bounds.h/2.5};
-			ctx.drawImage(fig[0], 0, 0, di.w, di.h);
+			ctx.drawImage(fig[0], off.x, off.y, di.w, di.w);
 			//this.naipe({w:4, h:5}, {x:0.3, y: -1.5, w: this.bounds.w/2.5, h: this.bounds.h/2.5}, ctx, fig);
-			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.h}, ctx, fig);
+			this.naipe({w:4, h:5}, {x:1.5, y:2, w: this.bounds.w, h: this.bounds.w}, ctx, fig);
 			//this.naipe({w:4, h:5}, {x:2.7, y:5.5, w: this.bounds.w/2.5, h: this.bounds.h/2.5}, ctx, fig);
-			ctx.drawImage(fig[0], this.bounds.w-di.w, this.bounds.h-di.h, di.w, di.h);
+			ctx.drawImage(fig[0], this.bounds.w-di.w-off.x, this.bounds.h-di.w-off.y, di.w, di.w);
 		}
 
 		if(c.id == 1){
