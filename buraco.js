@@ -703,8 +703,10 @@ function Deck(){
 			max = this.body[0].id;
 			min = this.body[this.body.length-1].id;
 		}
-		if(min == 2 && this.body[this.body.length-2].id != 3){
-			min = this.body[this.body.length-2].id;
+		if(this.body.length >= 3){
+			if(min == 2 && this.body[this.body.length-2].id != 3){
+				min = this.body[this.body.length-2].id;
+			}
 		}
 		if(ace){
 			if((14 - max) <= (min - 1)){
