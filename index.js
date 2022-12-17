@@ -11,6 +11,10 @@ app.get("/", function(req, res){
 	res.sendFile(__dirname + "/client/index.html");
 });
 
+app.get("/kill", function(req, res){
+	process.exit();
+});
+
 app.use("/client", express.static(__dirname + "/client"));
 
 // Create a Node.js based http server on port 8080
